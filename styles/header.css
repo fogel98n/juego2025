@@ -1,0 +1,17 @@
+
+.header{
+    width: 100%;
+    
+    background:#C093F5;
+    display: flex;
+    align-items: center;
+    
+    
+}
+.titulo-header{
+    font-family: 'Lilita One', cursive;
+    color: #FFFFFF;
+    font-size: 36px;
+    margin-left: 10px;
+
+}

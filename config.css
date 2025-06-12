@@ -1,0 +1,8 @@
+body{
+    background-color: #9378FC;
+}
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,82 @@
+.contenedor-juegos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titulo-juegos {
+  margin-top: 20px;
+  font-size: 36px;
+  color: #FFFFFF;
+  text-align: center;
+  font-family:  'Lilita One', cursive;
+}
+
+.contenedor-cuadros {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #9378FC;
+  padding: 40px;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas */
+  grid-auto-rows: 180px;
+  gap: 80px; /* Espacio entre los cuadros */
+  margin-top: 50px;
+  margin-bottom: 50px;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.cuadro-juego {
+  width: 228px;
+  height: 214px;
+  background-color: #584796;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-imagen-externo {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-imagen-interno {
+  width: 90px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+}
+.texto-juego{
+    margin-left: 70px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-family: 'Lilita One', cursive;
+}
+
+.imagen-juego {
+  width: 169px;
+  height: auto;
+  border-radius: 5px;
+}
+.contenedor-juego:nth-child(4),
+.contenedor-juego:nth-child(5),
+.cuadro-juego-4,
+.cuadro-juego-5 {
+  margin-left: 90px; 
+  margin-top: 20px;
+}
+
+.contenedor-juego:nth-child(4) .texto-juego,
+.contenedor-juego:nth-child(5) .texto-juego {
+  margin-left: 50px; 
+}

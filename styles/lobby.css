@@ -1,0 +1,70 @@
+.contenedor-lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.titulo-lobby {
+  font-size: 62px;
+  color: #fff;
+  font-family: 'Lilita One', cursive;
+  text-align: center;
+}
+
+.descripcion {
+  margin-top: 5px;
+  font-size: 36px;
+  color: #fff;
+  font-family: 'Lilita One', cursive;
+  text-align: center;
+}
+
+.codigo-lobby {
+  margin-top: 5px;
+  font-size: 80px;
+  color: #fff;
+  font-family: 'Lilita One', cursive;
+  text-align: center;
+}
+
+.jugadores {
+  font-size: 30px;
+  color: #fff;
+  font-family: 'Lilita One', cursive;
+  text-align: center;
+}
+
+.jugador-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 567px;
+  height: 59px;
+  background-color: #70568F;
+  color: #fff;
+  font-family: 'Lilita One', cursive;
+  font-size: 19px;
+}
+
+.jugadores-contenedor {
+  max-height: 200px;
+  overflow-y: scroll;
+  padding: 10px;
+ scrollbar-width: none;
+}
+
+.jugadores-contenedor::-webkit-scrollbar {
+  display: none;
+}
+.btn_inicio{
+    margin-top: 20px;
+    width: 261px;
+    height: 53px;
+    background-color: #584796;
+    border: none;
+    font-family: 'Lilita One', cursive;
+    color: #fff;
+    font-size: 36px;
+}

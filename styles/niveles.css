@@ -1,0 +1,176 @@
+.contenedor-niveles {
+  display: grid;
+  grid-template-columns: 1fr  1fr 140px;
+  grid-template-rows: auto auto auto auto auto auto auto 200px;
+  gap: 20px;
+  padding: 20px;
+}
+
+.header {
+  grid-column: 1 / 5;
+  grid-row: 1 / 2;
+}
+
+.titulo-niveles {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  text-align: center;
+  font-size: 64px;
+  color: #FFFFFF;
+  font-family: 'Lilita One', cursive;
+}
+
+.imagen-niveles {
+  grid-column: 1 / 2;
+  grid-row: 2 / 7;
+  justify-self: start;
+  align-self: center;
+  margin-top: 100px;
+  margin-left: 50px;
+}
+
+.boton-nivel-1 {
+  grid-column: 2 / 3;
+  grid-row: 4 / 5;
+  justify-self: center;
+  width: 220px;
+  height: 90px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-2 {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+  justify-self: end;
+  width: 220px;
+  height: 90px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-3 {
+  grid-column: 2 /3 ;
+  grid-row: 3 / 4;
+  justify-self: start;
+  width: 220px;
+  height: 90px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-4 {
+  grid-column: 2/ 3;
+  grid-row: 8 / 9;
+  align-self: center;
+  justify-self: center;
+  width: 130px;
+  height: 50px;
+  background-color: #584796;
+  border: none;
+  
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-5 {
+  grid-column: 1 / 2;
+  grid-row: 8/ 9;
+  align-self: center;
+  justify-self: start;
+  margin-left: 90px;
+  width: 300px;
+  height: 60px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 26px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-6 {
+  grid-column: 2 / 3;
+  grid-row: 8 / 9;
+  align-self: center;
+  justify-self: start;
+  width: 130px;
+  height: 50px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 26px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-7 {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+  justify-self: end;
+  align-self: center;
+  width: 100px;
+  height: 50px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.boton-nivel-8 {
+  grid-column: 2 / 3;
+  grid-row: 8 / 9;
+  justify-self: end;
+  align-self: center;
+  width: 130px;
+  height: 50px;
+  background-color: #584796;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Lilita One', cursive;
+  font-size: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.descripcion-juego {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  text-align: center;
+  margin-top: 130px;
+  font-size: 44px;
+  color: #FFFFFF;
+  font-family: 'Lilita One', cursive;
+}
+.boton-nivel-1,
+.boton-nivel-2,
+.boton-nivel-3,
+.boton-nivel-4,
+.boton-nivel-5,
+.boton-nivel-6,
+.boton-nivel-7,
+.boton-nivel-8 {
+  font-size: 26px; 
+}
