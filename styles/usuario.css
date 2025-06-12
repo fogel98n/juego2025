@@ -1,0 +1,33 @@
+.contenedor-usuario{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        
+      
+}
+.titulo-avatar{
+    font-size: 48px;
+    margin-top: 70px;
+}
+.contenedor-avatar{
+    width: 762px;
+    height: 284px;
+    background-color: #584796;
+    justify-self: center;
+}
+.contenedor-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+}
+.btn-siguuiente{
+    width: 321px;
+    height: 54px;
+    background-color: #584796;
+    color: #fff;
+    margin-top: 30px;
+    border: none;
+    font-size: 36px;
+}

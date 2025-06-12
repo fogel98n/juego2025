@@ -1,5 +1,5 @@
-import { Login } from "./components/login.js"
+import { inicio } from "./components/inicio.js"
 
 const DOM=document.getElementById("root")
 
-DOM.appendChild(Login())
+DOM.appendChild(inicio())

@@ -1,8 +1,14 @@
 body{
     background-color: #9378FC;
+    font-family: 'Lilita One', cursive;
+    color: #fff;
 }
 main{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+button{
+    font-family: 'Lilita One', cursive;
+    border: none;
 }

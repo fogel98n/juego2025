@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 
 .contenedor-login {
-  width: 1478px;
+  width: 100%;
   height: 903px;
   background-color: #9378FC;
   display: grid;
