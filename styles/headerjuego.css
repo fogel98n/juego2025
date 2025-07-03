@@ -1,0 +1,45 @@
+.headerjuego {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #C093F5;
+    color: white;
+  }
+  
+  .titulo {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .nivel-juego {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+  }
+  
+  .contenedor-estrellas {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .estrella {
+    width: 40px;
+    height: 40px;
+    background-color: #70568F;
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+  }
+  

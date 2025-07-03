@@ -1,19 +1,20 @@
 import { Header } from "./header.js";
-import { Login } from "./login.js";
 import { usuario } from "./usuario.js";
+import { Login } from "./login.js";
 
 export function inicio() {
   const contenedor = document.createElement("section");
   contenedor.className = "inicio";
 
+  // Botón para abrir el login
   const btn_inicioLogin = document.createElement("button");
   btn_inicioLogin.className = "btn-login";
-  btn_inicioLogin.textContent = "iniciar sesion";
+  btn_inicioLogin.textContent = "Iniciar sesión";
 
   btn_inicioLogin.addEventListener("click", () => {
-    const panel_login = Login();
+    const panelLogin = Login();
     document.body.innerHTML = "";
-    document.body.appendChild(panel_login);
+    document.body.appendChild(panelLogin);
   });
 
   const header = Header();
@@ -37,11 +38,27 @@ export function inicio() {
   btn_ingreso.className = "btn-ingreso";
   btn_ingreso.textContent = "Ingresar";
 
-  btn_ingreso.addEventListener("click",()=>{
-     const panel_usuario=usuario()
-     document.body.innerHTML=""
-     document.body.appendChild(panel_usuario)
-  })
+  btn_ingreso.addEventListener("click", async () => {
+    const codigoInput = contenedor_codigo.querySelector("input").value.trim();
+    if (!codigoInput) {
+      alert("Por favor ingresa un código válido");
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:5000/partidas/codigo/${codigoInput}`);
+      if (!res.ok) throw new Error("Código no válido");
+
+      const partida = await res.json();
+
+      // Mostrar el panel para registrar usuario, pasando partida
+      const panelUsuario = usuario(partida);
+      document.body.innerHTML = "";
+      document.body.appendChild(panelUsuario);
+    } catch (error) {
+      alert("Código de partida no válido");
+    }
+  });
 
   contenedorbtn.appendChild(btn_ingreso);
 
@@ -54,7 +71,7 @@ export function inicio() {
   return contenedor;
 }
 
-export function contenedorCodigo(textoDiv = "codigo") {
+export function contenedorCodigo(textoDiv = "Código") {
   const contenedor = document.createElement("div");
   contenedor.className = "contenedor_codigo";
 
@@ -71,4 +88,3 @@ export function contenedorCodigo(textoDiv = "codigo") {
 
   return contenedor;
 }
-

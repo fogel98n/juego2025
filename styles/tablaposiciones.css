@@ -1,0 +1,84 @@
+.posiciones-contenedor {
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .titulo-resultados {
+    font-size: 40px;
+  }
+  
+  .posiciones-tabla {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+  
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  
+  .posiciones-tabla::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .posiciones-tabla::-webkit-scrollbar-thumb {
+    background-color: #C093F5;
+    border-radius: 4px;
+  }
+  
+  .posiciones-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 611px;
+    height: 53px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background: #584796;
+    color: white;
+  }
+  
+  .posicion-numero {
+    width: 60px;
+    text-align: left;
+    font-size: 30px;
+  }
+  
+  .posicion-nombre {
+    flex: 1;
+    text-align: center;
+    font-size: 40px;
+  }
+  
+  .posicion-puntos {
+    width: 90px;
+    text-align: right;
+    font-size: 25px;
+  }
+  
+  .contenedor-btns {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  
+    button {
+      background-color: #C093F5;
+      color: #ffffff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: darken(#C093F5, 10%);
+      }
+    }
+  }
+  

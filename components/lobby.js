@@ -1,19 +1,9 @@
 import { Header } from "./header.js";
 import { espera } from "./espera.js";
 
-function generarCodigoAleatorio(longitud) {
-  const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let codigo = "";
-  for (let i = 0; i < longitud; i++) {
-    const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
-    codigo += caracteres[indiceAleatorio];
-  }
-  return codigo;
-}
-
-export function Lobby(tiempoSeleccionado) {
-  const contendor = document.createElement("div");
-  contendor.className = "contenedor-lobby";
+export async function Lobby(tiempoSeleccionado, idPartida) {
+  const contenedor = document.createElement("div");
+  contenedor.className = "contenedor-lobby";
 
   const tituloLobby = document.createElement("h1");
   tituloLobby.className = "titulo-lobby";
@@ -25,7 +15,18 @@ export function Lobby(tiempoSeleccionado) {
 
   const codigoLobby = document.createElement("h1");
   codigoLobby.className = "codigo-lobby";
-  codigoLobby.textContent = generarCodigoAleatorio(8);
+  codigoLobby.textContent = "Cargando código...";
+
+  // Mostrar código partida
+  try {
+    const res = await fetch(`http://localhost:5000/partidas/${idPartida}`);
+    if (!res.ok) throw new Error("No se pudo obtener el código de la partida");
+    const partidaData = await res.json();
+    codigoLobby.textContent = partidaData.codigo_partida;
+  } catch (error) {
+    console.error("Error obteniendo el código de la partida:", error);
+    codigoLobby.textContent = "Error al cargar el código";
+  }
 
   const jugadoresTitulo = document.createElement("h2");
   jugadoresTitulo.className = "jugadores";
@@ -33,45 +34,61 @@ export function Lobby(tiempoSeleccionado) {
 
   const jugadoresContenedor = document.createElement("div");
   jugadoresContenedor.className = "jugadores-contenedor";
-  jugadoresContenedor.style.maxHeight = "200px"; // Limita la altura del contenedor
-  jugadoresContenedor.style.overflowY = "auto"; // Habilita el scroll vertical
+  jugadoresContenedor.style.maxHeight = "200px";
+  jugadoresContenedor.style.overflowY = "auto";
 
-  const listaJugadores = [1, 2, 3, 4, 5];
+  // Obtener jugadores reales de backend
+  try {
+    const resJugadores = await fetch(`http://localhost:5000/usuarios/partida/${idPartida}`);
+    if (!resJugadores.ok) throw new Error("No se pudo obtener los jugadores");
+    const jugadores = await resJugadores.json();
 
-  listaJugadores.forEach((numero) => {
-    const jugadorDiv = document.createElement("div");
-    jugadorDiv.className = "jugador-div";
+    if (jugadores.length === 0) {
+      const noJugadores = document.createElement("p");
+      noJugadores.textContent = "No hay jugadores registrados aún.";
+      jugadoresContenedor.appendChild(noJugadores);
+    } else {
+      jugadores.forEach((usuario, index) => {
+        const jugadorDiv = document.createElement("div");
+        jugadorDiv.className = "jugador-div";
 
-    const jugadorNumero = document.createElement("p");
-    jugadorNumero.className = "jugador-numero";
-    jugadorNumero.textContent = `Jugador ${numero}`;
+        const jugadorNombre = document.createElement("p");
+        jugadorNombre.className = "jugador-nombre";
+        jugadorNombre.textContent = `${index + 1}. ${usuario.nombre}`;
 
-    jugadorDiv.appendChild(jugadorNumero);
-    jugadoresContenedor.appendChild(jugadorDiv);
-  });
+        jugadorDiv.appendChild(jugadorNombre);
+        jugadoresContenedor.appendChild(jugadorDiv);
+      });
+    }
+  } catch (error) {
+    console.error("Error obteniendo los jugadores:", error);
+    const errorMsg = document.createElement("p");
+    errorMsg.textContent = "Error al cargar jugadores";
+    jugadoresContenedor.appendChild(errorMsg);
+  }
 
   const tiempoSeleccionadoTexto = document.createElement("h2");
   tiempoSeleccionadoTexto.className = "tiempo-seleccionado";
-
+  tiempoSeleccionadoTexto.textContent = `Duración: ${tiempoSeleccionado} minutos`;
 
   const btn_inicio = document.createElement("button");
   btn_inicio.className = "btn_inicio";
   btn_inicio.textContent = "Iniciar";
 
   btn_inicio.addEventListener("click", () => {
-    const panelEspera = espera(tiempoSeleccionado); // Pasa el tiempo seleccionado al cronómetro
-    document.body.innerHTML = ""; // Limpia el contenido actual
-    document.body.appendChild(panelEspera); // Muestra el panel de espera
+    const panelEspera = espera(tiempoSeleccionado);
+    document.body.innerHTML = "";
+    document.body.appendChild(panelEspera);
   });
 
-  contendor.appendChild(Header());
-  contendor.appendChild(tituloLobby);
-  contendor.appendChild(descripcionlobby);
-  contendor.appendChild(codigoLobby);
-  contendor.appendChild(jugadoresTitulo);
-  contendor.appendChild(jugadoresContenedor);
-  contendor.appendChild(tiempoSeleccionadoTexto);
-  contendor.appendChild(btn_inicio);
+  contenedor.appendChild(Header());
+  contenedor.appendChild(tituloLobby);
+  contenedor.appendChild(descripcionlobby);
+  contenedor.appendChild(codigoLobby);
+  contenedor.appendChild(jugadoresTitulo);
+  contenedor.appendChild(jugadoresContenedor);
+  contenedor.appendChild(tiempoSeleccionadoTexto);
+  contenedor.appendChild(btn_inicio);
 
-  return contendor;
+  return contenedor;
 }
