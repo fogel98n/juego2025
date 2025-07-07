@@ -1,0 +1,46 @@
+.contenedor-emojigame {
+  padding: 20px;
+  text-align: center;
+}
+
+.emoji-objetivo h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.emoji-grande {
+  font-size: 2.5rem;
+}
+
+.contenedor-emojis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+.emoji-item {
+  font-size: 2rem;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.emoji-item:hover {
+  background-color: #ddd;
+}
+
+.tiempo-info-juego {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.tiempo-partidas, .intentos-restante {
+  font-size: 1rem;
+}

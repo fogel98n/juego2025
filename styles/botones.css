@@ -1,0 +1,15 @@
+.contenedor-botones{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    margin-top: 40px;
+}
+.boton-1, .boton-2,.boton-3{
+    width: 237px;
+    height: 61px;
+    font-size: 24px;
+    gap: 250px;
+    background-color: #C093F5;
+    color: white;
+}

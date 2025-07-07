@@ -1,0 +1,88 @@
+/* Contenedor principal */
+.contenedor-simondice {
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* Header y título */
+.contenedor-simondice header,
+.contenedor-simondice h1 {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 2rem;
+}
+
+/* Info partida */
+.contenedor-info-juego {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.tiempo-partida,
+.intentos-restantes {
+  padding: 8px 15px;
+  border-radius: 10px;
+  min-width: 130px;
+}
+
+/* Instrucción */
+.instruccion-simondice {
+  font-size: 1.5rem;
+  margin: 20px 0;
+  color: white;
+  font-weight: 600;
+}
+
+/* Opciones del juego */
+.opciones-simondice {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Fondo morado detrás de la imagen */
+.fondo-morado {
+  margin-top: 80px;
+  background-color: #70568F;
+  border-radius: 15px;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.fondo-morado:hover {
+  transform: scale(1.05);
+}
+
+/* Imagen centrada */
+.img-simondice {
+  max-width: 180px;
+  max-height: 180px;
+  border-radius: 10px;
+  transition: border 0.3s;
+  border: 3px solid transparent;
+}
+
+/* Verde para correcto, rojo para error */
+.img-simondice[style*="green"] {
+  border-color: #4caf50 !important;
+}
+
+.img-simondice[style*="red"] {
+  border-color: #f44336 !important;
+}
+
+/* Mensajes finales */
+.contenedor-simondice h2 {
+  color: white;
+  font-size: 1.8rem;
+  margin-top: 30px;
+}

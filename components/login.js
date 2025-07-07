@@ -1,11 +1,11 @@
 import { juegos } from "./juegos.js";
 import { crearImagenLogin } from "./logo.js"; 
 import { Header } from "./header.js";
+import { BASE_URL } from "../config.js";
+
 export function Login() {
   const contenedor = document.createElement("div");
   contenedor.className = "contenedor-login";
-
- 
 
   const encabezadoLogin = document.createElement("h2");
   encabezadoLogin.className = "encabezado-login";
@@ -41,7 +41,9 @@ export function Login() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
+      console.log("📤 Enviando datos de login:", { correo, contrasena });
+
+      const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,17 +51,33 @@ export function Login() {
         body: JSON.stringify({ correo, contrasena }),
       });
 
-      const data = await response.json();
+      console.log("✅ Respuesta del servidor:", response);
+
+      let data;
+
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+        console.log("📦 Datos recibidos:", data);
+      } else {
+        const texto = await response.text();
+        console.warn("⚠️ Respuesta no JSON:", texto);
+        alert("Error inesperado. El servidor no devolvió JSON.");
+        return;
+      }
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        const panelJuegos = juegos(); 
-        document.body.innerHTML = ""; 
-        document.body.appendChild(panelJuegos); 
+        console.log("🔑 Token guardado. Redirigiendo a juegos...");
+
+        const panelJuegos = juegos();
+        document.body.innerHTML = "";
+        document.body.appendChild(panelJuegos);
       } else {
         alert(data.message || "Credenciales inválidas");
       }
     } catch (error) {
+      console.error("❌ Error en el login:", error);
       alert("Error en la conexión al servidor");
     }
   });

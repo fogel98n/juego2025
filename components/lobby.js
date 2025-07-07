@@ -1,5 +1,6 @@
 import { Header } from "./header.js";
 import { espera } from "./espera.js";
+import { BASE_URL } from "../config.js";
 
 export async function Lobby(tiempoSeleccionado, idPartida) {
   const contenedor = document.createElement("div");
@@ -19,7 +20,7 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
 
   // Mostrar código partida
   try {
-    const res = await fetch(`http://localhost:5000/partidas/${idPartida}`);
+    const res = await fetch(`${BASE_URL}/partidas/${idPartida}`);
     if (!res.ok) throw new Error("No se pudo obtener el código de la partida");
     const partidaData = await res.json();
     codigoLobby.textContent = partidaData.codigo_partida;
@@ -39,7 +40,7 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
 
   // Obtener jugadores reales de backend
   try {
-    const resJugadores = await fetch(`http://localhost:5000/usuarios/partida/${idPartida}`);
+    const resJugadores = await fetch(`${BASE_URL}/usuarios/partida/${idPartida}`);
     if (!resJugadores.ok) throw new Error("No se pudo obtener los jugadores");
     const jugadores = await resJugadores.json();
 

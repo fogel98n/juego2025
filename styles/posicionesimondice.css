@@ -1,0 +1,50 @@
+.posiciones-simondice-contenedor {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 2rem auto;
+  border-radius: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.titulo-posiciones-simondice {
+  text-align: center;
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.tabla-posiciones-simondice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.fila-simondice {
+  display: grid;
+  grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
+  background-color: #584796;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  align-items: center;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.fila-simondice:hover {
+  transform: scale(1.02);
+  background-color: #C093F585;
+}
+
+.encabezado-simondice {
+  background-color: #d4c9ff;
+  font-weight: bold;
+  color: #3b2f71;
+}
+
+.col-simondice {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

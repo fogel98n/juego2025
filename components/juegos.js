@@ -1,5 +1,6 @@
 import { Header } from "./header.js";
 import { Niveles } from "./niveles.js"; // Importa la función Niveles
+import { BASE_URL } from "../config.js";
 
 export function juegos() {
   const contenedor = document.createElement("div");
@@ -17,7 +18,7 @@ export function juegos() {
   contenedor.appendChild(contenedorCuadros);
 
   // 🔁 Obtener los juegos desde la API
-  fetch("http://localhost:5000/juegos")
+  fetch(`${BASE_URL}/juegos`)
     .then(res => res.json())
     .then(juegos => {
       juegos.forEach((juego, index) => {
