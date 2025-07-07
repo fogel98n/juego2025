@@ -9,51 +9,51 @@ export function adivinaLafruta(partida) {
     [
       {
         nombre: "Manzana",
-        imagen: "../media/manzana.png",
+        imagen: "/media/manzana.png",
         pregunta: "¿Cuál de estas frutas es roja y muy común?"
       },
       {
         nombre: "Banano",
-        imagen: "../media/banano.jpg",
+        imagen: "/media/banano.jpg",
         pregunta: "¿Cuál de estas frutas es amarilla y curva?"
       },
       {
         nombre: "Naranja",
-        imagen: "../media/naranja.jpeg",
+        imagen: "/media/naranja.jpeg",
         pregunta: "¿Cuál fruta es redonda, jugosa y rica en vitamina C?"
       }
     ],
     [
       {
         nombre: "Sandía",
-        imagen: "../media/sandia.png",
+        imagen: "/media/sandia.png",
         pregunta: "¿Cuál fruta es grande, verde por fuera y roja por dentro?"
       },
       {
         nombre: "Uvas",
-        imagen: "../media/uvas.jpeg",
+        imagen: "/media/uvas.jpeg",
         pregunta: "¿Cuál fruta crece en racimos y puede ser morada o verde?"
       },
       {
         nombre: "Fresa",
-        imagen: "../media/fresa.jpeg",
+        imagen: "/media/fresa.jpeg",
         pregunta: "¿Cuál fruta es pequeña, roja y tiene semillas por fuera?"
       }
     ],
     [
       {
         nombre: "Granada",
-        imagen: "../media/granada.jpeg",
+        imagen: "/media/granada.jpeg",
         pregunta: "¿Cuál fruta tiene granos rojos jugosos en su interior?"
       },
       {
         nombre: "Kiwi",
-        imagen: "../media/kiwi.jpeg",
+        imagen: "/media/kiwi.jpeg",
         pregunta: "¿Cuál fruta es marrón por fuera y verde por dentro con semillas negras?"
       },
       {
         nombre: "Higo",
-        imagen: "../media/higo.jpeg",
+        imagen: "/media/higo.jpeg",
         pregunta: "¿Cuál fruta es pequeña, morada y muy dulce por dentro?"
       }
     ]
