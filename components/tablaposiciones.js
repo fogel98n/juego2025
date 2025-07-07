@@ -1,4 +1,5 @@
 import { usuario } from "./usuario.js";
+import { BASE_URL } from "../config.js";
 
 export function posiciones() {
   document.body.innerHTML = ""; 
@@ -13,7 +14,7 @@ export function posiciones() {
   const tabla = document.createElement("div");
   tabla.className = "posiciones-tabla";
 
-  fetch("http://localhost:5000/obteneresultados")
+  fetch(`${BASE_URL}/obteneresultados`)
     .then(res => res.json())
     .then(data => {
       if (!Array.isArray(data) || data.length === 0) {
@@ -80,7 +81,6 @@ function btnsposiciones() {
         const partida = {
           codigo_partida: "ABC123" 
         };
-
         document.body.innerHTML = "";
         document.body.appendChild(usuario(partida));
       });

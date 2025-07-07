@@ -2,6 +2,7 @@ import { crearImagenLogin } from "./logo.js";
 import { Header } from "./header.js";
 import { juegos } from "./juegos.js";
 import { Lobby } from "./lobby.js";
+import { BASE_URL } from "../config.js";
 
 export function Niveles(juego) {
   const contenedor = document.createElement("div");
@@ -73,7 +74,7 @@ export function Niveles(juego) {
 
         try {
           // Obtener juegos desde backend
-          const resJuegos = await fetch("http://localhost:5000/juegos");
+          const resJuegos = await fetch(`${BASE_URL}/juegos`);
           if (!resJuegos.ok) throw new Error("Error al obtener juegos");
           const juegosData = await resJuegos.json();
 
@@ -90,7 +91,7 @@ export function Niveles(juego) {
           const id_juego = juegoEncontrado.id;
 
           // Obtener niveles desde backend filtrando por id_juego
-          const resNiveles = await fetch(`http://localhost:5000/niveles?id_juego=${id_juego}`);
+          const resNiveles = await fetch(`${BASE_URL}/niveles?id_juego=${id_juego}`);
           if (!resNiveles.ok) throw new Error("Error al obtener niveles");
           const nivelesData = await resNiveles.json();
 
@@ -107,7 +108,7 @@ export function Niveles(juego) {
           const id_nivel = nivelEncontrado.id;
 
           // Crear partida enviando POST al backend
-          const resPartida = await fetch("http://localhost:5000/partidas", {
+          const resPartida = await fetch(`${BASE_URL}/partidas`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

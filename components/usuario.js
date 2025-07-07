@@ -1,6 +1,10 @@
 import { Header } from "./header.js";
 import { memoria } from "../juegos/memoria.js";
 import { adivinaLafigura } from "../juegos/adivinaLafigura.js";
+import { emojiGame } from "../juegos/emoji_game.js";
+import { adivinaLafruta } from "../juegos/adivinaLafruta.js";
+import { simondice } from "../juegos/simondice.js";
+import { BASE_URL } from "../config.js";
 
 export function usuario(partida) {
   const contenedor = document.createElement("section");
@@ -20,7 +24,6 @@ export function usuario(partida) {
   panel_usuario.appendChild(label);
   panel_usuario.appendChild(inputUsuario);
 
-  // Botón siguiente
   const contenedor_btn = document.createElement("div");
   contenedor_btn.className = "contenedor-btn";
 
@@ -41,9 +44,10 @@ export function usuario(partida) {
       return;
     }
 
+    console.log("Datos partida para registro usuario:", partida);
+
     try {
-      // Registrar usuario
-      const resUsuario = await fetch("http://localhost:5000/usuarios", {
+      const resUsuario = await fetch(`${BASE_URL}/usuarios`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -52,7 +56,11 @@ export function usuario(partida) {
         }),
       });
 
-      if (!resUsuario.ok) throw new Error("Error al registrar usuario");
+      if (!resUsuario.ok) {
+        const errorText = await resUsuario.text();
+        console.error("Error backend:", resUsuario.status, errorText);
+        throw new Error("Error al registrar usuario: " + errorText);
+      }
 
       const usuarioRegistrado = await resUsuario.json();
       console.log("✅ Usuario registrado:", usuarioRegistrado);
@@ -64,17 +72,28 @@ export function usuario(partida) {
         nombre_usuario: usuarioRegistrado.nombre,
       };
 
-      // 🔍 Verificamos el tipo de juego asignado a la partida
       let panelJuego;
 
-      switch (partida.juego) {
-        case "memoria":
+      console.log("🔍 ID de juego:", partida.id_juego);
+
+      switch (partida.id_juego) {
+        case 1:
           panelJuego = memoria(datosCompletos);
           break;
-        case "adivinaLaFigura":
+        case 2:
           panelJuego = adivinaLafigura(datosCompletos);
           break;
+        case 3:
+          panelJuego = emojiGame(datosCompletos);
+          break;
+        case 4:
+          panelJuego = adivinaLafruta(datosCompletos);
+          break;
+        case 5:
+          panelJuego = simondice(datosCompletos);
+          break;
         default:
+          console.error("❌ Juego no reconocido. id_juego =", partida.id_juego);
           alert("No se ha asignado un juego válido a esta partida");
           return;
       }
@@ -83,7 +102,7 @@ export function usuario(partida) {
       document.body.appendChild(panelJuego);
 
     } catch (error) {
-      alert("No se pudo registrar el usuario");
+      alert("No se pudo registrar el usuario: " + error.message);
       console.error(error);
     }
   });

@@ -1,6 +1,7 @@
 import { Header } from "./header.js";
 import { usuario } from "./usuario.js";
 import { Login } from "./login.js";
+import { BASE_URL } from "../config.js";  // <-- Importa la base URL
 
 export function inicio() {
   const contenedor = document.createElement("section");
@@ -46,7 +47,7 @@ export function inicio() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/partidas/codigo/${codigoInput}`);
+      const res = await fetch(`${BASE_URL}/partidas/codigo/${codigoInput}`); // <---- aquí
       if (!res.ok) throw new Error("Código no válido");
 
       const partida = await res.json();

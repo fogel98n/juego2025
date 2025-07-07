@@ -1,29 +1,43 @@
 import { headerjuego } from "../components/headerJuego.js";
 import { posiciones } from "../components/tablaposiciones.js";
+import { BASE_URL } from "../config.js";
 
 export function memoria(partida) {
-  console.log("Objeto partida recibido:", partida);
+  console.log("🧠 Objeto partida recibido:", partida);
 
   const contenedor = document.createElement("section");
   contenedor.className = "contenedor-memoria";
 
-  const contenedorinfo = document.createElement("div");
-  contenedorinfo.className = "contenedor-info";
+  const contenedorInfo = document.createElement("div");
+  contenedorInfo.className = "contenedor-info";
 
-  const aciertos = document.createElement("div");
-  aciertos.className = "aciertos";
-  aciertos.textContent = "Aciertos: 0";
+  const aciertosDiv = document.createElement("div");
+  aciertosDiv.className = "aciertos";
+  aciertosDiv.textContent = "Aciertos: 0";
 
-  const tiempo = document.createElement("div");
-  tiempo.className = "tiempo-partida";
+  const tiempoDiv = document.createElement("div");
+  tiempoDiv.className = "tiempo-partida";
 
-  let tiempoRestante = partida.duracion_minutos * 60;
+  const movimientosDiv = document.createElement("div");
+  movimientosDiv.className = "movimientos";
+  movimientosDiv.textContent = "Movimientos: 0";
+
+  contenedorInfo.appendChild(aciertosDiv);
+  contenedorInfo.appendChild(tiempoDiv);
+  contenedorInfo.appendChild(movimientosDiv);
+
+  const contenido = document.createElement("div");
+  contenido.className = "contenido-juego";
+  contenido.appendChild(contenedorInfo);
+
+  const tiempoTotal = (partida.duracion_minutos || 1) * 60;
+  let tiempoRestante = tiempoTotal;
   let timerId = null;
 
   function actualizarTiempo() {
     const minutos = Math.floor(tiempoRestante / 60);
     const segundos = tiempoRestante % 60;
-    tiempo.textContent = `Tiempo: ${minutos.toString().padStart(2, "0")}:${segundos
+    tiempoDiv.textContent = `⏱ Tiempo: ${minutos.toString().padStart(2, "0")}:${segundos
       .toString()
       .padStart(2, "0")}`;
 
@@ -31,31 +45,20 @@ export function memoria(partida) {
       tiempoRestante--;
       timerId = setTimeout(actualizarTiempo, 1000);
     } else {
-      tiempo.textContent = "⏰ Tiempo finalizado";
-      // Podrías bloquear el juego aquí si quieres
+      tiempoDiv.textContent = "⏰ Tiempo agotado";
     }
   }
+
   actualizarTiempo();
-
-  const movimientos = document.createElement("div");
-  movimientos.className = "movimientos";
-  movimientos.textContent = "Movimientos: 0";
-
-  contenedorinfo.appendChild(aciertos);
-  contenedorinfo.appendChild(tiempo);
-  contenedorinfo.appendChild(movimientos);
-
-  const contenido = document.createElement("div");
-  contenido.className = "contenido-juego";
-  contenido.appendChild(contenedorinfo);
 
   const panelJuego = crearJuegoMemoria(
     partida,
-    aciertos,
-    movimientos,
+    aciertosDiv,
+    movimientosDiv,
     () => tiempoRestante,
     () => clearTimeout(timerId)
   );
+
   contenido.appendChild(panelJuego);
 
   contenedor.appendChild(headerjuego(partida.nombre_nivel || "Nivel"));
@@ -78,7 +81,7 @@ function crearJuegoMemoria(partida, aciertosRef, movimientosRef, getTiempoRestan
   ];
 
   const nombreNivel = partida.nombre_nivel;
-  let pares = nombreNivel === "nivel3" ? 6 : nombreNivel === "nivel2" ? 4 : 3;
+  const pares = nombreNivel === "nivel3" ? 6 : nombreNivel === "nivel2" ? 4 : 3;
 
   const seleccionadas = imagenes.slice(0, pares);
   const cartas = [...seleccionadas, ...seleccionadas].map((img, i) => ({
@@ -90,8 +93,7 @@ function crearJuegoMemoria(partida, aciertosRef, movimientosRef, getTiempoRestan
   cartas.sort(() => Math.random() - 0.5);
 
   const tablero = document.createElement("div");
-  tablero.className = "tablero";
-  tablero.classList.add(`nivel-${pares}`);
+  tablero.className = `tablero nivel-${pares}`;
 
   let primeraCarta = null;
   let bloqueado = false;
@@ -137,27 +139,27 @@ function crearJuegoMemoria(partida, aciertosRef, movimientosRef, getTiempoRestan
               const tiempoUsado = partida.duracion_minutos * 60 - getTiempoRestante();
               const puntuacion = calcularPuntuacion(tiempoUsado, movimientos);
 
-              const dataEnviar = {
+              const data = {
                 id_usuario: partida.id_usuario,
                 id_partida: partida.id_partida,
-                movimientos: movimientos,
+                movimientos,
                 tiempo_usado: tiempoUsado,
-                puntuacion: puntuacion,
+                puntuacion,
                 estado: "finalizada",
               };
-              console.log("Datos a enviar al backend:", dataEnviar);
 
-              fetch("http://localhost:5000/guardaresultado", {
+              console.log("📤 Enviando resultado:", data);
+
+              fetch(`${BASE_URL}/guardaresultado`, {
                 method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(dataEnviar),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
               })
                 .then((res) => res.json())
-                .then((data) => {
-                  console.log("✅ Resultado guardado:", data);
-                  posiciones(); // Mostrar tabla de posiciones
+                .then(() => {
+                  document.body.innerHTML = "";
+                  const panel = posiciones(partida);
+                  document.body.appendChild(panel);
                 })
                 .catch((err) => {
                   console.error("❌ Error al guardar resultado:", err);
