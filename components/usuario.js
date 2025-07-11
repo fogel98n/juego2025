@@ -44,10 +44,9 @@ export function usuario(partida) {
       return;
     }
 
-    console.log("Datos partida para registro usuario:", partida);
-
     try {
-      const resUsuario = await fetch(`${BASE_URL}/usuarios`, {
+      // Registrar usuario
+      const resUsuario = await fetch(`${BASE_URL}/usuarios/registrar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -58,23 +57,52 @@ export function usuario(partida) {
 
       if (!resUsuario.ok) {
         const errorText = await resUsuario.text();
-        console.error("Error backend:", resUsuario.status, errorText);
         throw new Error("Error al registrar usuario: " + errorText);
       }
 
       const usuarioRegistrado = await resUsuario.json();
-      console.log("✅ Usuario registrado:", usuarioRegistrado);
+
+      // Mapear id_juego al tipo_partida para el backend
+      const tipoPorIdJuego = {
+        1: "memoria",
+        2: "adivina",
+        3: "emoji",
+        4: "fruta",
+        5: "simondice"
+      };
+
+      const tipo_partida = tipoPorIdJuego[partida.id_juego];
+
+      if (!tipo_partida) {
+        alert("Tipo de partida no válido");
+        return;
+      }
+
+      // Asociar usuario a la partida
+      const resAsociar = await fetch(`${BASE_URL}/usuarios/asociar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_usuario: usuarioRegistrado.id,
+          id_partida: usuarioRegistrado.id_partida,
+          tipo_partida,
+        }),
+      });
+
+      if (!resAsociar.ok) {
+        const errorText = await resAsociar.text();
+        throw new Error("Error al asociar usuario: " + errorText);
+      }
 
       const datosCompletos = {
         ...partida,
         id_usuario: usuarioRegistrado.id,
-        id_partida: partida.id_partida || partida.id,
+        id_partida: usuarioRegistrado.id_partida,
         nombre_usuario: usuarioRegistrado.nombre,
       };
 
+      // Entrar al juego según id_juego
       let panelJuego;
-
-      console.log("🔍 ID de juego:", partida.id_juego);
 
       switch (partida.id_juego) {
         case 1:
@@ -93,8 +121,7 @@ export function usuario(partida) {
           panelJuego = simondice(datosCompletos);
           break;
         default:
-          console.error("❌ Juego no reconocido. id_juego =", partida.id_juego);
-          alert("No se ha asignado un juego válido a esta partida");
+          alert("Juego no reconocido. Verifica el id_juego.");
           return;
       }
 
@@ -115,4 +142,3 @@ export function usuario(partida) {
 
   return contenedor;
 }
-
