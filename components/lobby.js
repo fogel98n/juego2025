@@ -2,7 +2,7 @@ import { Header } from "./header.js";
 import { espera } from "./espera.js";
 import { BASE_URL } from "../config.js";
 
-export async function Lobby(tiempoSeleccionado, idPartida) {
+export async function Lobby(tiempoSeleccionado, idPartida, tipoJuego) {
   const contenedor = document.createElement("div");
   contenedor.className = "contenedor-lobby";
 
@@ -18,7 +18,7 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
   codigoLobby.className = "codigo-lobby";
   codigoLobby.textContent = "Cargando código...";
 
-  // Mostrar código partida
+  // Mostrar código de la partida
   try {
     const res = await fetch(`${BASE_URL}/partidas/${idPartida}`);
     if (!res.ok) throw new Error("No se pudo obtener el código de la partida");
@@ -38,35 +38,49 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
   jugadoresContenedor.style.maxHeight = "200px";
   jugadoresContenedor.style.overflowY = "auto";
 
-  // Obtener jugadores reales de backend
-  try {
-    const resJugadores = await fetch(`${BASE_URL}/usuarios/partida/${idPartida}`);
-    if (!resJugadores.ok) throw new Error("No se pudo obtener los jugadores");
-    const jugadores = await resJugadores.json();
+  // Función para cargar jugadores y actualizar el contenedor
+  async function cargarJugadores() {
+    console.log("Buscando jugadores para partida", idPartida, "tipo:", tipoJuego);
+    try {
+      const resJugadores = await fetch(`${BASE_URL}/usuarios/partida/${tipoJuego}/${idPartida}`);
+      if (!resJugadores.ok) throw new Error("No se pudo obtener los jugadores");
+      const jugadores = await resJugadores.json();
 
-    if (jugadores.length === 0) {
-      const noJugadores = document.createElement("p");
-      noJugadores.textContent = "No hay jugadores registrados aún.";
-      jugadoresContenedor.appendChild(noJugadores);
-    } else {
-      jugadores.forEach((usuario, index) => {
-        const jugadorDiv = document.createElement("div");
-        jugadorDiv.className = "jugador-div";
+      console.log("Jugadores recibidos:", jugadores);
 
-        const jugadorNombre = document.createElement("p");
-        jugadorNombre.className = "jugador-nombre";
-        jugadorNombre.textContent = `${index + 1}. ${usuario.nombre}`;
+      jugadoresContenedor.innerHTML = ""; // Limpiar antes de actualizar
 
-        jugadorDiv.appendChild(jugadorNombre);
-        jugadoresContenedor.appendChild(jugadorDiv);
-      });
+      if (jugadores.length === 0) {
+        const noJugadores = document.createElement("p");
+        noJugadores.textContent = "No hay jugadores registrados aún.";
+        jugadoresContenedor.appendChild(noJugadores);
+      } else {
+        jugadores.forEach((usuario, index) => {
+          const jugadorDiv = document.createElement("div");
+          jugadorDiv.className = "jugador-div";
+
+          const jugadorNombre = document.createElement("p");
+          jugadorNombre.className = "jugador-nombre";
+          jugadorNombre.textContent = `${index + 1}. ${usuario.nombre}`;
+
+          jugadorDiv.appendChild(jugadorNombre);
+          jugadoresContenedor.appendChild(jugadorDiv);
+        });
+      }
+    } catch (error) {
+      console.error("Error obteniendo los jugadores:", error);
+      jugadoresContenedor.innerHTML = "";
+      const errorMsg = document.createElement("p");
+      errorMsg.textContent = "Error al cargar jugadores";
+      jugadoresContenedor.appendChild(errorMsg);
     }
-  } catch (error) {
-    console.error("Error obteniendo los jugadores:", error);
-    const errorMsg = document.createElement("p");
-    errorMsg.textContent = "Error al cargar jugadores";
-    jugadoresContenedor.appendChild(errorMsg);
   }
+
+  // Cargar jugadores inicialmente
+  cargarJugadores();
+
+  // Actualizar lista cada 3 segundos
+  const intervalo = setInterval(cargarJugadores, 3000);
 
   const tiempoSeleccionadoTexto = document.createElement("h2");
   tiempoSeleccionadoTexto.className = "tiempo-seleccionado";
@@ -77,6 +91,7 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
   btn_inicio.textContent = "Iniciar";
 
   btn_inicio.addEventListener("click", () => {
+    clearInterval(intervalo); // Detener actualización al iniciar partida
     const panelEspera = espera(tiempoSeleccionado);
     document.body.innerHTML = "";
     document.body.appendChild(panelEspera);
