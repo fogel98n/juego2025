@@ -65,34 +65,12 @@ export function usuario(partida) {
       // Mapear id_juego al tipo_partida para el backend
       const tipoPorIdJuego = {
         1: "memoria",
-        2: "adivina",
-        3: "emoji",
-        4: "fruta",
+        2: "adivinaLafigura",
+        3: "emojiGame",
+        4: "adivinaLafruta",
         5: "simondice"
       };
 
-      const tipo_partida = tipoPorIdJuego[partida.id_juego];
-
-      if (!tipo_partida) {
-        alert("Tipo de partida no válido");
-        return;
-      }
-
-      // Asociar usuario a la partida
-      const resAsociar = await fetch(`${BASE_URL}/usuarios/asociar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_usuario: usuarioRegistrado.id,
-          id_partida: usuarioRegistrado.id_partida,
-          tipo_partida,
-        }),
-      });
-
-      if (!resAsociar.ok) {
-        const errorText = await resAsociar.text();
-        throw new Error("Error al asociar usuario: " + errorText);
-      }
 
       const datosCompletos = {
         ...partida,
