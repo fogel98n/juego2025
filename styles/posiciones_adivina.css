@@ -4,18 +4,22 @@
   margin: 2rem auto;
   border-radius: 20px;
   font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
 }
+
 .titulo-posiciones {
   text-align: center;
   color: white;
   font-size: 2rem;
   margin-bottom: 1.5rem;
 }
+
 .tabla-posiciones {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 }
+
 .fila {
   display: grid;
   grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
@@ -25,19 +29,41 @@
   align-items: center;
   font-size: 1rem;
   transition: transform 0.2s;
+  box-sizing: border-box;
 }
+
 .fila:hover {
   transform: scale(1.02);
   background-color: #C093F585;
 }
+
 .encabezado {
   background-color: #d4c9ff;
   font-weight: bold;
   color: #3b2f71;
 }
+
 .col {
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 430px) {
+  .posiciones-adivina-contenedor {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .titulo-posiciones {
+    font-size: 1.5rem;
+  }
+
+  .fila {
+    grid-template-columns: 1fr 2fr 1.5fr 1.5fr 1.5fr;
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
 }

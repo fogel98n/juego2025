@@ -2,7 +2,7 @@
 
 .contenedor-login {
   width: 100%;
-  height: 903px;
+  min-height: 900px;
   background-color: #9378FC;
   display: grid;
   grid-template-rows: auto 1fr;
@@ -11,6 +11,8 @@
   justify-items: center;
   align-items: center;
   font-family: 'Lilita One', cursive;
+  box-sizing: border-box;
+  padding: 20px;
 }
 
 .titulo-login {
@@ -21,9 +23,12 @@
   color: #FFFFFF;
   text-align: center;
   margin-bottom: 20px;
-  background:#C093F5;
-    display: flex;
-    align-items: center;
+  background: #C093F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 15px;
 }
 
 .contenedor-imagen {
@@ -41,6 +46,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .contenedor-blanco {
@@ -64,16 +70,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
+  padding: 0 10px;
 }
 
-.label-correo, .label-contrasena {
+.label-correo,
+.label-contrasena {
   font-size: 18px;
   color: #FFFFFF;
   margin-bottom: 5px;
+  align-self: flex-start;
 }
 
-.input-correo, .input-contrasena {
+.input-correo,
+.input-contrasena {
   width: 300px;
+  max-width: 100%;
   height: 40px;
   margin-bottom: 20px;
   padding: 5px;
@@ -82,16 +94,19 @@
   background-color: #C093F585;
   outline: none;
   transition: all 0.3s ease;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
-.input-correo:focus, .input-contrasena:focus {
+.input-correo:focus,
+.input-contrasena:focus {
   background-color: #9378FC;
-  
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .boton-login {
   width: 228px;
+  max-width: 100%;
   height: 55px;
   background-color: #584796;
   color: #FFFFFF;
@@ -103,6 +118,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .encabezado-login {
@@ -111,4 +127,68 @@
   font-size: 24px;
   color: #FFFFFF;
   margin-top: 20px;
+}
+
+@media (max-width: 430px) {
+  .contenedor-login {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 15px;
+    padding: 15px;
+    min-height: auto;
+  }
+
+  .titulo-login {
+    height: 60px;
+    font-size: 24px;
+  }
+
+  .contenedor-imagen {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .contenedor-morado {
+    width: 280px;
+    height: 270px;
+  }
+
+  .contenedor-blanco {
+    width: 220px;
+    height: 220px;
+  }
+
+  .imagen-login {
+    width: 200px;
+  }
+
+  .formulario-login {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+    padding: 0;
+  }
+
+  .label-correo,
+  .label-contrasena {
+    font-size: 16px;
+  }
+
+  .input-correo,
+  .input-contrasena {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-width: 6px;
+  }
+
+  .boton-login {
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .encabezado-login {
+    font-size: 18px;
+  }
 }

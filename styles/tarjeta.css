@@ -6,13 +6,16 @@
   padding: 40px;
   height: 100vh;
   text-align: center;
+  box-sizing: border-box;
 }
+
 .titulo-tarjeta {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 30px;
   color: white;
 }
+
 .contenedor-img {
   width: 519px;
   height: 465px;
@@ -20,32 +23,72 @@
   overflow: hidden;
   background-color: #584796;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-
   display: flex;
   align-items: center;         
-  justify-content: center;     
+  justify-content: center;
 }
+
 .imagen-tarjeta {
   width: 387px;
   height: 340px;
   object-fit: cover;
 }
-.btn-nueva-partida{
-    width: 237px;
-    height: 61px;
-    font-size: 24px;
-    gap: 250px;
-    background-color: #C093F5;
-    color: white;
-    margin-top: 10px;
+
+.btn-nueva-partida {
+  width: 237px;
+  height: 61px;
+  font-size: 24px;
+  background-color: #C093F5;
+  color: white;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
 }
-.btn-siguiente{
-    margin-top: 190px;
-     width: 237px;
-    height: 61px;
-    font-size: 24px;
-    gap: 250px;
-    background-color: #C093F5;
-    color: white;
-    
+
+.btn-siguiente {
+  margin-top: 190px;
+  width: 237px;
+  height: 61px;
+  font-size: 24px;
+  background-color: #C093F5;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+@media (max-width: 430px) {
+  .contenedor-tarjeta {
+    padding: 20px;
+    height: auto;
+  }
+
+  .titulo-tarjeta {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .contenedor-img {
+    width: 90vw;
+    height: auto;
+    max-height: 300px;
+  }
+
+  .imagen-tarjeta {
+    width: 100%;
+    height: auto;
+  }
+
+  .btn-nueva-partida,
+  .btn-siguiente {
+    width: 90vw;
+    height: 50px;
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .btn-siguiente {
+    margin-top: 30px;
+  }
 }
