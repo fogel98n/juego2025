@@ -1,14 +1,8 @@
 import { Header } from "./header.js";
-import { espera } from "./espera.js";
 import { BASE_URL } from "../config.js";
 
-export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
-  // Fijar tipoJuego a "emoji"
-  const tipoJuego = "emoji";
-
-  console.log("⏱️ tiempoSeleccionado:", tiempoSeleccionado);
-  console.log("🆔 idPartida:", idPartida);
-  console.log("🎮 tipoJuego fijado a:", tipoJuego);
+export async function Lobby(tiempoSeleccionado, idPartida) {
+  const tipoJuego = "emoji"; // fijo para este ejemplo
 
   const contenedor = document.createElement("div");
   contenedor.className = "contenedor-lobby";
@@ -50,67 +44,42 @@ export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
   jugadoresContenedor.style.maxHeight = "200px";
   jugadoresContenedor.style.overflowY = "auto";
 
-  let codigo_partida = "";
-
-  // Obtener datos de la partida
-  try {
-    const res = await fetch(`${BASE_URL}/partidas/${idPartida}`);
-    if (!res.ok) throw new Error("No se pudo obtener la partida");
-    const partidaData = await res.json();
-
-    codigo_partida = partidaData.codigo_partida;
-    codigoLobby.textContent = codigo_partida;
-
-    // Obtener nombre del juego y nivel
-    const resInfo = await fetch(`${BASE_URL}/partidas/codigo/${codigo_partida}`);
-    if (!resInfo.ok) throw new Error("No se pudo obtener la información del juego");
-
-    const data = await resInfo.json();
-    nombreJuegoTexto.textContent = `Juego: ${data.nombre_juego || "Desconocido"}`;
-    nombreNivelTexto.textContent = `Nivel: ${data.nombre_nivel || "Desconocido"}`;
-  } catch (error) {
-    console.error("Error obteniendo datos de la partida:", error);
-    codigoLobby.textContent = "⚠️ Error al cargar el código";
-    nombreJuegoTexto.textContent = "Juego: no disponible";
-    nombreNivelTexto.textContent = "Nivel: no disponible";
-  }
-
-  // Crear botón iniciar y estado
+  // Botón para iniciar partida
   const btn_inicio = document.createElement("button");
   btn_inicio.className = "btn_inicio";
   btn_inicio.textContent = "Iniciar";
-  btn_inicio.disabled = true; // deshabilitado inicialmente
+  btn_inicio.disabled = true;
 
   // Variable para saber si hay jugadores
   let hayJugadores = false;
 
-
-  btn_inicio.addEventListener("click", async () => {
-    if (!hayJugadores) return;
+  // Obtener datos de la partida (codigo_partida, nombre juego y nivel)
+  let codigo_partida = "";
+  async function cargarDatosPartida() {
     try {
-      const res = await fetch(`${BASE_URL}/partidas/iniciar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_partida: idPartida })
-      });
-      if (!res.ok) throw new Error("No se pudo iniciar la partida");
-      clearInterval(intervaloJugadores);
-      alert("Partida iniciada correctamente");
-    } catch (error) {
-      console.error("Error al iniciar la partida:", error);
-      alert("Error al iniciar la partida");
-    }
-  });  
-  // Función para cargar jugadores
-  async function cargarJugadores() {
-    if (!idPartida) {
-      console.error("❌ Falta idPartida.");
-      jugadoresContenedor.innerHTML = "<p style='color:red;'>Datos inválidos de la partida.</p>";
-      btn_inicio.disabled = true;
-      hayJugadores = false;
-      return;
-    }
+      const res = await fetch(`${BASE_URL}/partidas/${idPartida}`);
+      if (!res.ok) throw new Error("No se pudo obtener la partida");
+      const partidaData = await res.json();
 
+      codigo_partida = partidaData.codigo_partida;
+      codigoLobby.textContent = codigo_partida;
+
+      const resInfo = await fetch(`${BASE_URL}/partidas/codigo/${codigo_partida}`);
+      if (!resInfo.ok) throw new Error("No se pudo obtener la info del juego");
+      const info = await resInfo.json();
+
+      nombreJuegoTexto.textContent = `Juego: ${info.nombre_juego || "Desconocido"}`;
+      nombreNivelTexto.textContent = `Nivel: ${info.nombre_nivel || "Desconocido"}`;
+    } catch (error) {
+      console.error("Error obteniendo datos de la partida:", error);
+      codigoLobby.textContent = "⚠️ Error al cargar el código";
+      nombreJuegoTexto.textContent = "Juego: no disponible";
+      nombreNivelTexto.textContent = "Nivel: no disponible";
+    }
+  }
+
+  // Función para cargar jugadores y mostrarlos
+  async function cargarJugadores() {
     try {
       const res = await fetch(`${BASE_URL}/usuarios/${tipoJuego}/${idPartida}`);
       if (!res.ok) throw new Error("No se pudieron obtener los jugadores");
@@ -127,15 +96,11 @@ export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
         return;
       }
 
-      jugadores.forEach((jugador, index) => {
-        const jugadorDiv = document.createElement("div");
-        jugadorDiv.className = "jugador-div";
-
-        const nombre = document.createElement("p");
-        nombre.textContent = `${index + 1}. ${jugador.nombre || "Sin nombre"}`;
-
-        jugadorDiv.appendChild(nombre);
-        jugadoresContenedor.appendChild(jugadorDiv);
+      jugadores.forEach((jugador, i) => {
+        const divJugador = document.createElement("div");
+        divJugador.className = "jugador-div";
+        divJugador.textContent = `${i + 1}. ${jugador.nombre || "Sin nombre"}`;
+        jugadoresContenedor.appendChild(divJugador);
       });
 
       btn_inicio.disabled = false;
@@ -149,12 +114,37 @@ export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
     }
   }
 
+  // Evento para iniciar la partida
+  btn_inicio.addEventListener("click", async () => {
+    if (!hayJugadores) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}/partidas/iniciar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_partida: idPartida }),
+      });
+
+      if (!res.ok) throw new Error("No se pudo iniciar la partida");
+
+      clearInterval(intervaloJugadores);
+      alert("Partida iniciada correctamente");
+
+      // Aquí puedes redirigir o mostrar la pantalla del juego
+      // Ejemplo: window.location.href = `/juego/${idPartida}`;
+
+    } catch (error) {
+      console.error("Error al iniciar la partida:", error);
+      alert("Error al iniciar la partida");
+    }
+  });
+
   // Mostrar duración
   const tiempoSeleccionadoTexto = document.createElement("h2");
   tiempoSeleccionadoTexto.className = "tiempo-seleccionado";
   tiempoSeleccionadoTexto.textContent = `Duración: ${tiempoSeleccionado} minutos`;
 
-  // Ensamblar DOM
+  // Armar DOM
   contenedor.appendChild(Header());
   contenedor.appendChild(tituloLobby);
   contenedor.appendChild(descripcionLobby);
@@ -166,8 +156,11 @@ export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
   contenedor.appendChild(tiempoSeleccionadoTexto);
   contenedor.appendChild(btn_inicio);
 
-  // Cargar jugadores inicialmente y luego cada 3s
-  cargarJugadores();
+  // Carga inicial
+  await cargarDatosPartida();
+  await cargarJugadores();
+
+  // Actualizar jugadores cada 3 segundos
   const intervaloJugadores = setInterval(cargarJugadores, 3000);
 
   return contenedor;
