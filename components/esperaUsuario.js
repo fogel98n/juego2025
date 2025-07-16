@@ -51,7 +51,6 @@ export function esperaUsuario(datos) {
             panelJuego = simondice(datos);
             break;
           default:
-            alert("Juego no reconocido.");
             return;
         }
 

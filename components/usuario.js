@@ -70,6 +70,33 @@ export function usuario(partida) {
         nombre_usuario: usuarioRegistrado.nombre,
       };
 
+      // 🧩 Asociar usuario a la partida según el tipo de juego
+      const tipo_partida = (() => {
+        switch (partida.id_juego) {
+          case 1: return "memoria";
+          case 2: return "adivina";
+          case 3: return "emoji";
+          case 4: return "fruta";
+          case 5: return "simondice";
+          default: return null;
+        }
+      })();
+
+      if (!tipo_partida) {
+        alert("Tipo de partida no reconocido.");
+        return;
+      }
+
+      await fetch(`${BASE_URL}/usuarios/asociar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_usuario: usuarioRegistrado.id,
+          id_partida: usuarioRegistrado.id_partida,
+          tipo_partida: tipo_partida,
+        }),
+      });
+
       // Mostrar pantalla de espera
       const panelEspera = await esperaUsuario(datosCompletos);
       document.body.innerHTML = "";
@@ -103,7 +130,6 @@ export function usuario(partida) {
                 panelJuego = simondice(datosCompletos);
                 break;
               default:
-                alert("Juego no reconocido.");
                 return;
             }
 
