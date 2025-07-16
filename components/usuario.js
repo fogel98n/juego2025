@@ -63,50 +63,57 @@ export function usuario(partida) {
 
       const usuarioRegistrado = await resUsuario.json();
 
-      // Mapear id_juego al tipo_partida para el backend
-      const tipoPorIdJuego = {
-        1: "memoria",
-        2: "adivinaLafigura",
-        3: "emojiGame",
-        4: "adivinaLafruta",
-        5: "simondice"
-      };
-
-
       const datosCompletos = {
         ...partida,
         id_usuario: usuarioRegistrado.id,
         id_partida: usuarioRegistrado.id_partida,
         nombre_usuario: usuarioRegistrado.nombre,
       };
-      //
-         const panelesperaUsuario= esperaUsuario(datosCompletos);
-      document.body.innerHTML = "";
-      document.body.appendChild(panelesperaUsuario);
 
-      switch (partida.id_juego) {
-        case 1:
-          panelJuego = memoria(datosCompletos);
-          break;
-        case 2:
-          panelJuego = adivinaLafigura(datosCompletos);
-          break;
-        case 3:
-          panelJuego = emojiGame(datosCompletos);
-          break;
-        case 4:
-          panelJuego = adivinaLafruta(datosCompletos);
-          break;
-        case 5:
-          panelJuego = simondice(datosCompletos);
-          break;
-        default:
-          alert("Juego no reconocido. Verifica el id_juego.");
-          return;
-      }
-
+      // Mostrar pantalla de espera
+      const panelEspera = await esperaUsuario(datosCompletos);
       document.body.innerHTML = "";
-      document.body.appendChild(panelJuego);
+      document.body.appendChild(panelEspera);
+
+      // Esperar a que el estado cambie a 'iniciada'
+      const verificarInicio = setInterval(async () => {
+        try {
+          const res = await fetch(`${BASE_URL}/partidas/${datosCompletos.id_partida}/estado`);
+          if (!res.ok) throw new Error("Error al obtener el estado de la partida");
+          const data = await res.json();
+
+          if (data.estado === "iniciada") {
+            clearInterval(verificarInicio);
+
+            let panelJuego;
+            switch (partida.id_juego) {
+              case 1:
+                panelJuego = memoria(datosCompletos);
+                break;
+              case 2:
+                panelJuego = adivinaLafigura(datosCompletos);
+                break;
+              case 3:
+                panelJuego = emojiGame(datosCompletos);
+                break;
+              case 4:
+                panelJuego = adivinaLafruta(datosCompletos);
+                break;
+              case 5:
+                panelJuego = simondice(datosCompletos);
+                break;
+              default:
+                alert("Juego no reconocido.");
+                return;
+            }
+
+            document.body.innerHTML = "";
+            document.body.appendChild(panelJuego);
+          }
+        } catch (error) {
+          console.error("Error consultando estado de la partida:", error);
+        }
+      }, 2000); // consulta cada 2 segundos
 
     } catch (error) {
       alert("No se pudo registrar el usuario: " + error.message);
