@@ -84,14 +84,23 @@ export async function Lobby(tiempoSeleccionado, idPartida /* , tipoJuego */) {
   // Variable para saber si hay jugadores
   let hayJugadores = false;
 
-  btn_inicio.addEventListener("click", () => {
-    if (!hayJugadores) return; // no iniciar si no hay jugadores
-    clearInterval(intervaloJugadores); // detener actualización automática
-    const panelEspera = espera(tiempoSeleccionado, tipoJuego, idPartida);
-    document.body.innerHTML = "";
-    document.body.appendChild(panelEspera);
-  });
 
+  btn_inicio.addEventListener("click", async () => {
+    if (!hayJugadores) return;
+    try {
+      const res = await fetch(`${BASE_URL}/partidas/iniciar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_partida: idPartida })
+      });
+      if (!res.ok) throw new Error("No se pudo iniciar la partida");
+      clearInterval(intervaloJugadores);
+      alert("Partida iniciada correctamente");
+    } catch (error) {
+      console.error("Error al iniciar la partida:", error);
+      alert("Error al iniciar la partida");
+    }
+  });  
   // Función para cargar jugadores
   async function cargarJugadores() {
     if (!idPartida) {

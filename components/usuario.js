@@ -5,6 +5,7 @@ import { emojiGame } from "../juegos/emoji_game.js";
 import { adivinaLafruta } from "../juegos/adivinaLafruta.js";
 import { simondice } from "../juegos/simondice.js";
 import { BASE_URL } from "../config.js";
+import { esperaUsuario } from "./esperaUsuario.js";
 
 export function usuario(partida) {
   const contenedor = document.createElement("section");
@@ -78,9 +79,10 @@ export function usuario(partida) {
         id_partida: usuarioRegistrado.id_partida,
         nombre_usuario: usuarioRegistrado.nombre,
       };
-
-      // Entrar al juego según id_juego
-      let panelJuego;
+      //
+         const panelesperaUsuario= esperaUsuario(datosCompletos);
+      document.body.innerHTML = "";
+      document.body.appendChild(panelesperaUsuario);
 
       switch (partida.id_juego) {
         case 1:
