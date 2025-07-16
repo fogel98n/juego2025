@@ -128,7 +128,6 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
       if (!res.ok) throw new Error("No se pudo iniciar la partida");
 
       clearInterval(intervaloJugadores);
-      alert("Partida iniciada correctamente");
 
       // Aquí puedes redirigir o mostrar la pantalla del juego
       // Ejemplo: window.location.href = `/juego/${idPartida}`;

@@ -4,6 +4,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .inicio-header {
@@ -16,6 +18,7 @@
   color: #FFFFFF;
   background: #C093F5;
   padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .btn-login {
@@ -93,4 +96,58 @@
   font-family: 'Lilita One', cursive;
   font-size: 36px;
   cursor: pointer;
+}
+
+@media (max-width: 430px) {
+  .inicio-header {
+    font-size: 24px;
+    padding: 0 10px;
+    height: 60px;
+  }
+
+  .btn-login {
+    width: 140px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .titulo-inicio {
+    font-size: 48px;
+    margin-top: 20px;
+  }
+
+  .titulo-codigo {
+    font-size: 28px;
+    margin-top: 8px;
+  }
+
+  .contenedor_codigo {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 15px 10px;
+    gap: 10px;
+  }
+
+  .input-codigo {
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .btn-div {
+    width: 100%;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .btn-ingreso-container {
+    margin-top: 60px;
+  }
+
+  .btn-ingreso {
+    width: 80%;
+    height: 50px;
+    font-size: 24px;
+  }
 }

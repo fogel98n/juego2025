@@ -1,17 +1,26 @@
-
-.header{
-    width: 100%;
-    
-    background:#C093F5;
-    display: flex;
-    align-items: center;
-    
-    
+.header {
+  width: 100%;
+  background: #C093F5;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  box-sizing: border-box;
 }
-.titulo-header{
-    font-family: 'Lilita One', cursive;
-    color: #FFFFFF;
-    font-size: 36px;
-    margin-left: 10px;
 
+.titulo-header {
+  font-family: 'Lilita One', cursive;
+  color: #FFFFFF;
+  font-size: 36px;
+  margin-left: 10px;
+}
+
+@media (max-width: 430px) {
+  .titulo-header {
+    font-size: 24px;
+    margin-left: 8px;
+  }
+
+  .header {
+    padding: 8px 10px;
+  }
 }

@@ -4,6 +4,7 @@
   margin: 2rem auto;
   border-radius: 20px;
   font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
 }
 
 .titulo-posiciones-simondice {
@@ -28,6 +29,7 @@
   align-items: center;
   font-size: 1rem;
   transition: transform 0.2s;
+  box-sizing: border-box;
 }
 
 .fila-simondice:hover {
@@ -48,3 +50,20 @@
   white-space: nowrap;
 }
 
+@media (max-width: 430px) {
+  .posiciones-simondice-contenedor {
+    padding: 1rem;
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .titulo-posiciones-simondice {
+    font-size: 1.5rem;
+  }
+
+  .fila-simondice {
+    grid-template-columns: 1fr 2fr 1.5fr 1.5fr 1.5fr;
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+}

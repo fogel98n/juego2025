@@ -1,34 +1,61 @@
-.titulo-tiempo{
-    font-family: 'Lilita One', cursive;
-    color: #fff;
-    font-size: 62px;
-    justify-self: center;
+.titulo-tiempo {
+  font-family: 'Lilita One', cursive;
+  color: #fff;
+  font-size: 62px;
+  justify-self: center;
+  text-align: center;
 }
-.contendor-espera{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 20px;
+
+.contendor-espera {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
 }
-.tiempo-restante{
-    font-family: 'Lilita One', cursive;
-    color: #fff;
-    font-size: 62px;
-    justify-self: center;
+
+.tiempo-restante {
+  font-family: 'Lilita One', cursive;
+  color: #fff;
+  font-size: 62px;
+  justify-self: center;
+  text-align: center;
 }
-.contenedor-puestos{
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    text-align: center;
+
+.contenedor-puestos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  text-align: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
 }
-.en-curso{
-    font-family: 'Lilita One', cursive;
-    color: #fff;
-    font-size: 48px;
+
+.en-curso {
+  font-family: 'Lilita One', cursive;
+  color: #fff;
+  font-size: 48px;
 }
-.finalizado{
-    font-family: 'Lilita One', cursive;
-    color: #fff;
-    font-size: 48px;
+
+.finalizado {
+  font-family: 'Lilita One', cursive;
+  color: #fff;
+  font-size: 48px;
+}
+
+@media (max-width: 430px) {
+  .titulo-tiempo,
+  .tiempo-restante {
+    font-size: 36px;
+  }
+
+  .en-curso,
+  .finalizado {
+    font-size: 28px;
+  }
+
+  .contenedor-puestos {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+  }
 }

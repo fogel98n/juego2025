@@ -1,15 +1,34 @@
-.contenedor-botones{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    margin-top: 40px;
+.contenedor-botones {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+  flex-wrap: wrap; /* Para que en pantallas pequeñas bajen a la siguiente fila */
+  gap: 15px; /* Separación entre botones en móviles */
 }
-.boton-1, .boton-2,.boton-3{
-    width: 237px;
-    height: 61px;
-    font-size: 24px;
-    gap: 250px;
-    background-color: #C093F5;
-    color: white;
+
+.boton-1, .boton-2, .boton-3 {
+  width: 237px;
+  height: 61px;
+  font-size: 24px;
+  background-color: #C093F5;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  /* elimina gap: 250px; que no aplica en botones */
+}
+
+/* Ajustes para pantallas pequeñas como iPhone 13 */
+@media (max-width: 430px) {
+  .contenedor-botones {
+    justify-content: center;
+  }
+
+  .boton-1, .boton-2, .boton-3 {
+    width: 100%;      /* Botones toman todo el ancho disponible */
+    max-width: 300px; /* Maximo ancho para no ser demasiado grandes */
+    font-size: 18px;  /* Ajuste de fuente para móviles */
+    height: 50px;     /* Altura reducida para pantalla pequeña */
+  }
 }

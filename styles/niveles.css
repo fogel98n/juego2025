@@ -1,13 +1,14 @@
 .contenedor-niveles {
   display: grid;
-  grid-template-columns: 1fr  1fr 140px;
+  grid-template-columns: 1fr 1fr 140px;
   grid-template-rows: auto auto auto auto auto auto auto 200px;
   gap: 20px;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .header {
-  grid-column: 1 / 5;
+  grid-column: 1 / 4;
   grid-row: 1 / 2;
 }
 
@@ -39,7 +40,7 @@
   border: none;
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
@@ -54,13 +55,13 @@
   border: none;
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
 
 .boton-nivel-3 {
-  grid-column: 2 /3 ;
+  grid-column: 2 / 3;
   grid-row: 3 / 4;
   justify-self: start;
   width: 220px;
@@ -69,13 +70,13 @@
   border: none;
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
 
 .boton-nivel-4 {
-  grid-column: 2/ 3;
+  grid-column: 2 / 3;
   grid-row: 8 / 9;
   align-self: center;
   justify-self: center;
@@ -83,17 +84,16 @@
   height: 50px;
   background-color: #584796;
   border: none;
-  
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
 
 .boton-nivel-5 {
   grid-column: 1 / 2;
-  grid-row: 8/ 9;
+  grid-row: 8 / 9;
   align-self: center;
   justify-self: start;
   margin-left: 90px;
@@ -135,7 +135,7 @@
   border: none;
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
@@ -151,10 +151,11 @@
   border: none;
   border-radius: 5px;
   font-family: 'Lilita One', cursive;
-  font-size: 16px;
+  font-size: 26px;
   color: #FFFFFF;
   cursor: pointer;
 }
+
 .descripcion-juego {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
@@ -164,13 +165,63 @@
   color: #FFFFFF;
   font-family: 'Lilita One', cursive;
 }
-.boton-nivel-1,
-.boton-nivel-2,
-.boton-nivel-3,
-.boton-nivel-4,
-.boton-nivel-5,
-.boton-nivel-6,
-.boton-nivel-7,
-.boton-nivel-8 {
-  font-size: 26px; 
+
+@media (max-width: 430px) {
+  .contenedor-niveles {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .header {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  .titulo-niveles {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    font-size: 36px;
+    margin: 0 auto;
+  }
+
+  .imagen-niveles {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    margin: 0 auto;
+    margin-top: 40px;
+    margin-left: 0;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .boton-nivel-1,
+  .boton-nivel-2,
+  .boton-nivel-3,
+  .boton-nivel-4,
+  .boton-nivel-5,
+  .boton-nivel-6,
+  .boton-nivel-7,
+  .boton-nivel-8 {
+    grid-column: 1 / 2;
+    grid-row: auto;
+    width: 100%;
+    max-width: 320px;
+    height: 60px;
+    font-size: 20px;
+    justify-self: center;
+    margin: 5px 0;
+  }
+
+  .boton-nivel-5 {
+    margin-left: 0;
+  }
+
+  .descripcion-juego {
+    grid-column: 1 / 2;
+    grid-row: 9 / 10;
+    font-size: 28px;
+    margin-top: 20px;
+  }
 }

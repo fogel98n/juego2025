@@ -41,6 +41,37 @@
   font-weight: bold;
 }
 
-.tiempo-partidas, .intentos-restante {
+.tiempo-partidas,
+.intentos-restante {
   font-size: 1rem;
+}
+
+@media (max-width: 430px) {
+  .emoji-objetivo h2 {
+    font-size: 1.2rem;
+  }
+
+  .emoji-grande {
+    font-size: 2rem;
+  }
+
+  .contenedor-emojis {
+    max-width: 300px;
+    gap: 10px;
+  }
+
+  .emoji-item {
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+
+  .tiempo-info-juego {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tiempo-partidas,
+  .intentos-restante {
+    font-size: 0.9rem;
+  }
 }
