@@ -7,19 +7,20 @@ export function simondice(partida) {
 
   const preguntasPorNivel = [
     [
-      { nombre: "Gato", imagen: "/media/gato.jpeg", instruccion: "Simón dice: toca el gato" },
-      { nombre: "Perro", imagen: "/media/perro.jpeg", instruccion: "Simón dice: toca el perro" },
-      { nombre: "Pájaro", imagen: "/media/pajaro.jpeg", instruccion: "Simón dice: toca el pájaro" },
+
+      { nombre: "Gato", imagen: "./media/gato.jpeg", instruccion: "Simón dice: toca el gato" },
+      { nombre: "Perro", imagen: "./media/perro.jpeg", instruccion: "Simón dice: toca el perro" },
+      { nombre: "Pájaro", imagen: "./media/pajaro.jpeg", instruccion: "Simón dice: toca el pájaro" },
     ],
     [
-      { nombre: "Elefante", imagen: "/media/elefante.jpeg", instruccion: "Simón dice: toca el elefante" },
-      { nombre: "León", imagen: "/media/leon.jpeg", instruccion: "Simón dice: toca el león" },
-      { nombre: "Mono", imagen: "/media/mono.jpeg", instruccion: "Simón dice: toca el mono" },
+      { nombre: "Elefante", imagen: "./media/elefante.jpeg", instruccion: "Simón dice: toca el elefante" },
+      { nombre: "León", imagen: "./media/leon.jpeg", instruccion: "Simón dice: toca el león" },
+      { nombre: "Mono", imagen: "./media/mono.jpeg", instruccion: "Simón dice: toca el mono" },
     ],
     [
-      { nombre: "Tigre", imagen: "/media/tigre.jpeg", instruccion: "Simón dice: toca el tigre" },
-      { nombre: "Cebra", imagen: "/media/cebra.jpeg", instruccion: "Simón dice: toca la cebra" },
-      { nombre: "Jirafa", imagen: "/media/jirafa.jpeg", instruccion: "Simón dice: toca la jirafa" },
+      { nombre: "Tigre", imagen: "./media/tigre.jpeg", instruccion: "Simón dice: toca el tigre" },
+      { nombre: "Cebra", imagen: "./media/cebra.jpeg", instruccion: "Simón dice: toca la cebra" },
+      { nombre: "Jirafa", imagen: "./media/jirafa.jpeg", instruccion: "Simón dice: toca la jirafa" },
     ],
   ];
 
