@@ -13,7 +13,7 @@ export function tarjeta() {
   recuadroimg.className = "contenedor-img";
 
   const img = document.createElement("img");
-  img.src = "/media/targeta.jpg";
+  img.src = "./media/targeta.jpg";
   img.alt = "Gracias por jugar";
   img.className = "imagen-tarjeta";
 
