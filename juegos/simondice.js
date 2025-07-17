@@ -7,6 +7,7 @@ export function simondice(partida) {
 
   const preguntasPorNivel = [
     [
+
       { nombre: "Gato", imagen: "./media/gato.jpeg", instruccion: "Simón dice: toca el gato" },
       { nombre: "Perro", imagen: "./media/perro.jpeg", instruccion: "Simón dice: toca el perro" },
       { nombre: "Pájaro", imagen: "./media/pajaro.jpeg", instruccion: "Simón dice: toca el pájaro" },
