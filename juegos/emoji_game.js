@@ -43,7 +43,7 @@ export function emojiGame(partida) {
   let intentosRestantes = 3;
   let tiempoInicio = Date.now();
 
-  // Timer en pantalla
+  // ⏱ Muestra el cronómetro
   const interval = setInterval(() => {
     const ahora = Date.now();
     const transcurrido = Math.floor((ahora - tiempoInicio) / 1000);
@@ -53,6 +53,30 @@ export function emojiGame(partida) {
       .toString()
       .padStart(2, "0")}`;
   }, 1000);
+
+  // Panel emergente para ronda superada
+  function mostrarPanelRondaSuperada(ronda) {
+    const panel = document.createElement("div");
+    panel.className = "panel-ronda-superada";
+    panel.textContent = `¡Ronda ${ronda - 1} superada!`;
+    panel.style.position = "fixed";
+    panel.style.top = "20%";
+    panel.style.left = "50%";
+    panel.style.transform = "translateX(-50%)";
+    panel.style.backgroundColor = "rgba(0, 128, 0, 0.85)";
+    panel.style.color = "white";
+    panel.style.padding = "1rem 2rem";
+    panel.style.borderRadius = "10px";
+    panel.style.fontSize = "1.5rem";
+    panel.style.zIndex = "9999";
+    panel.style.boxShadow = "0 0 10px #004400";
+
+    document.body.appendChild(panel);
+
+    setTimeout(() => {
+      panel.remove();
+    }, 1500);
+  }
 
   function guardarResultado(estado = "finalizada") {
     clearInterval(interval);
@@ -65,7 +89,7 @@ export function emojiGame(partida) {
       aciertos: rondaActual,
       intentos_fallidos: intentosFallidos,
       tiempo: tiempoFinal,
-      estado,
+      estado, // 👈 Este campo actualiza también el estado del usuario en la BD
     };
 
     if (!datos.id_usuario || !datos.id_partida) {
@@ -117,11 +141,14 @@ export function emojiGame(partida) {
           emoji.style.backgroundColor = "#d4fcd6";
 
           if (rondaActual < rondasTotales) {
+            // Mostrar panel antes de cargar siguiente ronda
+            mostrarPanelRondaSuperada(rondaActual + 1);
+
             rondaActual++;
-            setTimeout(cargarRonda, 1000);
+            setTimeout(cargarRonda, 1500);
           } else {
             alert("🎉 ¡Completaste las 3 rondas!");
-            guardarResultado("finalizada");
+            guardarResultado("finalizada"); // 👈 Estado finalizado
           }
         } else {
           emoji.style.backgroundColor = "#fcd4d4";
@@ -131,7 +158,7 @@ export function emojiGame(partida) {
 
           if (intentosFallidos >= 3) {
             contenedorEmojis.innerHTML = "";
-            guardarResultado("fallida");
+            guardarResultado("fallida"); // 👈 Estado fallida
           }
         }
       });
@@ -143,4 +170,3 @@ export function emojiGame(partida) {
   cargarRonda();
   return contenedor;
 }
-

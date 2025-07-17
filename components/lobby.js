@@ -1,9 +1,8 @@
 import { Header } from "./header.js";
 import { BASE_URL } from "../config.js";
+import { espera } from "./espera.js";
 
 export async function Lobby(tiempoSeleccionado, idPartida) {
-  const tipoJuego = "emoji"; // fijo para este ejemplo
-
   const contenedor = document.createElement("div");
   contenedor.className = "contenedor-lobby";
 
@@ -14,6 +13,18 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
     contenedor.appendChild(errorMensaje);
     return contenedor;
   }
+
+  const tipoJuegoMap = {
+    1: "memoria",
+    2: "adivina",
+    3: "emoji",
+    4: "fruta",
+    5: "simondice"
+  };
+
+  let tipoJuego = ""; 
+  let codigo_partida = "";
+  let intervaloJugadores;
 
   const tituloLobby = document.createElement("h1");
   tituloLobby.className = "titulo-lobby";
@@ -44,17 +55,13 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
   jugadoresContenedor.style.maxHeight = "200px";
   jugadoresContenedor.style.overflowY = "auto";
 
-  // Botón para iniciar partida
   const btn_inicio = document.createElement("button");
   btn_inicio.className = "btn_inicio";
   btn_inicio.textContent = "Iniciar";
   btn_inicio.disabled = true;
 
-  // Variable para saber si hay jugadores
   let hayJugadores = false;
 
-  // Obtener datos de la partida (codigo_partida, nombre juego y nivel)
-  let codigo_partida = "";
   async function cargarDatosPartida() {
     try {
       const res = await fetch(`${BASE_URL}/partidas/${idPartida}`);
@@ -64,26 +71,39 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
       codigo_partida = partidaData.codigo_partida;
       codigoLobby.textContent = codigo_partida;
 
+      tipoJuego = tipoJuegoMap[partidaData.id_juego];
+      console.log("Tipo de juego asignado:", tipoJuego);
+
       const resInfo = await fetch(`${BASE_URL}/partidas/codigo/${codigo_partida}`);
       if (!resInfo.ok) throw new Error("No se pudo obtener la info del juego");
       const info = await resInfo.json();
 
       nombreJuegoTexto.textContent = `Juego: ${info.nombre_juego || "Desconocido"}`;
       nombreNivelTexto.textContent = `Nivel: ${info.nombre_nivel || "Desconocido"}`;
+
+      await cargarJugadores();
+      intervaloJugadores = setInterval(cargarJugadores, 3000);
+
     } catch (error) {
-      console.error("Error obteniendo datos de la partida:", error);
-      codigoLobby.textContent = "⚠️ Error al cargar el código";
-      nombreJuegoTexto.textContent = "Juego: no disponible";
-      nombreNivelTexto.textContent = "Nivel: no disponible";
+      console.error("Error obteniendo datos de la partida:", error.message);
+     
     }
   }
 
-  // Función para cargar jugadores y mostrarlos
   async function cargarJugadores() {
+    if (!tipoJuego) {
+      console.warn("Tipo de juego no definido. No se cargan jugadores.");
+      return;
+    }
+
     try {
-      const res = await fetch(`${BASE_URL}/usuarios/${tipoJuego}/${idPartida}`);
-      if (!res.ok) throw new Error("No se pudieron obtener los jugadores");
+      const url = `${BASE_URL}/usuarios/${tipoJuego}/${idPartida}`;
+      console.log("Fetch jugadores URL:", url);
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`No se pudieron obtener los jugadores, status: ${res.status}`);
       const jugadores = await res.json();
+      console.log("Jugadores recibidos:", jugadores);
 
       jugadoresContenedor.innerHTML = "";
 
@@ -99,7 +119,20 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
       jugadores.forEach((jugador, i) => {
         const divJugador = document.createElement("div");
         divJugador.className = "jugador-div";
-        divJugador.textContent = `${i + 1}. ${jugador.nombre || "Sin nombre"}`;
+
+        const avatarImg = document.createElement("img");
+        avatarImg.alt = `Avatar de ${jugador.nombre}`;
+        avatarImg.src = `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${jugador.id_avatar || jugador.avatar || "default"}&size=40`;
+        avatarImg.style.width = "40px";
+        avatarImg.style.height = "40px";
+        avatarImg.style.marginRight = "10px";
+        avatarImg.style.verticalAlign = "middle";
+
+        const nombreSpan = document.createElement("span");
+        nombreSpan.textContent = `${i + 1}. ${jugador.nombre || "Sin nombre"}`;
+
+        divJugador.appendChild(avatarImg);
+        divJugador.appendChild(nombreSpan);
         jugadoresContenedor.appendChild(divJugador);
       });
 
@@ -107,43 +140,42 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
       hayJugadores = true;
 
     } catch (error) {
-      console.error("Error cargando jugadores:", error);
+      console.error("Error cargando jugadores:", error.message);
       jugadoresContenedor.innerHTML = "<p style='color:red;'>Error al cargar jugadores.</p>";
       btn_inicio.disabled = true;
       hayJugadores = false;
     }
   }
 
-  // Evento para iniciar la partida
   btn_inicio.addEventListener("click", async () => {
     if (!hayJugadores) return;
 
-    try {
-      const res = await fetch(`${BASE_URL}/partidas/iniciar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_partida: idPartida }),
-      });
+  try {
+    const res = await fetch(`${BASE_URL}/partidas/iniciar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id_partida: idPartida }),
+    });
 
-      if (!res.ok) throw new Error("No se pudo iniciar la partida");
+    if (!res.ok) throw new Error("No se pudo iniciar la partida");
 
-      clearInterval(intervaloJugadores);
+    clearInterval(intervaloJugadores);
 
-      // Aquí puedes redirigir o mostrar la pantalla del juego
-      // Ejemplo: window.location.href = `/juego/${idPartida}`;
+    // ✅ Mostrar pantalla de espera correctamente
+    const contenedorEspera = espera(tiempoSeleccionado, tipoJuego, idPartida);
+    document.body.innerHTML = "";
+    document.body.appendChild(contenedorEspera);
 
-    } catch (error) {
-      console.error("Error al iniciar la partida:", error);
-      alert("Error al iniciar la partida");
-    }
+  } catch (error) {
+    console.error("Error al iniciar la partida:", error.message);
+    alert("Ocurrió un error al iniciar la partida. Intenta nuevamente.");
+  }
   });
 
-  // Mostrar duración
   const tiempoSeleccionadoTexto = document.createElement("h2");
   tiempoSeleccionadoTexto.className = "tiempo-seleccionado";
   tiempoSeleccionadoTexto.textContent = `Duración: ${tiempoSeleccionado} minutos`;
 
-  // Armar DOM
   contenedor.appendChild(Header());
   contenedor.appendChild(tituloLobby);
   contenedor.appendChild(descripcionLobby);
@@ -155,12 +187,8 @@ export async function Lobby(tiempoSeleccionado, idPartida) {
   contenedor.appendChild(tiempoSeleccionadoTexto);
   contenedor.appendChild(btn_inicio);
 
-  // Carga inicial
   await cargarDatosPartida();
-  await cargarJugadores();
-
-  // Actualizar jugadores cada 3 segundos
-  const intervaloJugadores = setInterval(cargarJugadores, 3000);
 
   return contenedor;
 }
+

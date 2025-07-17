@@ -1,5 +1,6 @@
+// espera.js
 import { Header } from "./header.js";
-import { juegos } from "./juegos.js"; // Importar la función para redirigir
+import { juegos } from "./juegos.js";
 import { BASE_URL } from "../config.js";
 
 export function espera(tiempoInicial, tipoJuego, idPartida) {
@@ -14,38 +15,53 @@ export function espera(tiempoInicial, tipoJuego, idPartida) {
   tiempoRestante.className = "tiempo-restante";
   tiempoRestante.textContent = formatTime(tiempoInicial * 60);
 
-  const contendor_puestos = document.createElement("div");
-  contendor_puestos.className = "contenedor-puestos";
+  const contenedorPuestos = document.createElement("div");
+  contenedorPuestos.className = "contenedor-puestos";
 
-  // Título "En curso"
-  const curso = document.createElement("h2");
-  curso.className = "en-curso";
-  curso.textContent = "En curso";
-  contendor_puestos.appendChild(curso);
+  // Sección "En curso"
+  const seccionCurso = document.createElement("div");
+  seccionCurso.className = "seccion-jugadores";
 
-  // Contenedor lista jugadores "En curso"
-  const listaJugadores = document.createElement("div");
-  listaJugadores.className = "lista-jugadores";
-  listaJugadores.style.marginBottom = "20px"; // espacio para separar de "Finalizado"
-  contendor_puestos.appendChild(listaJugadores);
+  const tituloCurso = document.createElement("h2");
+  tituloCurso.className = "en-curso";
+  tituloCurso.textContent = "En curso";
 
-  // Título "Finalizado"
-  const finalizado = document.createElement("h2");
-  finalizado.className = "finalizado";
-  finalizado.textContent = "Finalizado";
-  contendor_puestos.appendChild(finalizado);
+  const listaJugadoresEnCurso = document.createElement("div");
+  listaJugadoresEnCurso.className = "lista-jugadores";
+
+  seccionCurso.appendChild(tituloCurso);
+  seccionCurso.appendChild(listaJugadoresEnCurso);
+
+  // Sección "Finalizado"
+  const seccionFinalizado = document.createElement("div");
+  seccionFinalizado.className = "seccion-jugadores";
+
+  const tituloFinalizado = document.createElement("h2");
+  tituloFinalizado.className = "finalizado";
+  tituloFinalizado.textContent = "Finalizado";
+
+  const listaJugadoresFinalizados = document.createElement("div");
+  listaJugadoresFinalizados.className = "lista-jugadores";
+
+  seccionFinalizado.appendChild(tituloFinalizado);
+  seccionFinalizado.appendChild(listaJugadoresFinalizados);
+
+  // Agregar las dos secciones al contenedor principal (dos columnas)
+  contenedorPuestos.appendChild(seccionCurso);
+  contenedorPuestos.appendChild(seccionFinalizado);
 
   contenedor.appendChild(Header());
   contenedor.appendChild(tituloTiempo);
   contenedor.appendChild(tiempoRestante);
-  contenedor.appendChild(contendor_puestos);
+  contenedor.appendChild(contenedorPuestos);
 
   let tiempo = tiempoInicial * 60;
 
-  // Función para cargar jugadores en proceso
+  // Función para cargar jugadores en curso y finalizados
   async function cargarJugadores() {
     if (!tipoJuego || !idPartida) {
-      listaJugadores.innerHTML = "<p style='color:red;'>Datos inválidos de la partida.</p>";
+      listaJugadoresEnCurso.innerHTML = "<p style='color:red;'>Datos inválidos de la partida.</p>";
+      listaJugadoresFinalizados.innerHTML = "";
       return;
     }
     try {
@@ -53,21 +69,52 @@ export function espera(tiempoInicial, tipoJuego, idPartida) {
       if (!res.ok) throw new Error("No se pudieron obtener los jugadores");
       const jugadores = await res.json();
 
-      listaJugadores.innerHTML = "";
+      console.log("Jugadores recibidos:", jugadores); // <-- Para depurar
+
+      // Limpio ambas listas
+      listaJugadoresEnCurso.innerHTML = "";
+      listaJugadoresFinalizados.innerHTML = "";
 
       if (!Array.isArray(jugadores) || jugadores.length === 0) {
-        listaJugadores.textContent = "Aún no hay jugadores unidos.";
+        listaJugadoresEnCurso.textContent = "Aún no hay jugadores unidos.";
+        listaJugadoresFinalizados.textContent = "No hay jugadores finalizados.";
         return;
       }
 
-      jugadores.forEach((jugador, index) => {
-        const jugadorDiv = document.createElement("p");
-        jugadorDiv.textContent = `${index + 1}. ${jugador.nombre || "Sin nombre"}`;
-        listaJugadores.appendChild(jugadorDiv);
-      });
+      // Filtrar por estado
+      const enCurso = jugadores.filter(j => j.estado === "en_juego");
+      const finalizados = jugadores.filter(j => j.estado === "finalizada");
+
+      // Evitar que jugadores en finalizados aparezcan también en enCurso
+      const finalizadosIds = new Set(finalizados.map(j => j.id_usuario || j.nombre));
+      const enCursoFiltrado = enCurso.filter(j => !finalizadosIds.has(j.id_usuario || j.nombre));
+
+      // Mostrar en curso
+      if (enCursoFiltrado.length === 0) {
+        listaJugadoresEnCurso.textContent = "No hay jugadores en curso.";
+      } else {
+        enCursoFiltrado.forEach((jugador, index) => {
+          const jugadorDiv = document.createElement("p");
+          jugadorDiv.textContent = `${index + 1}. ${jugador.nombre || "Sin nombre"}`;
+          listaJugadoresEnCurso.appendChild(jugadorDiv);
+        });
+      }
+
+      // Mostrar finalizados
+      if (finalizados.length === 0) {
+        listaJugadoresFinalizados.textContent = "No hay jugadores finalizados.";
+      } else {
+        finalizados.forEach((jugador, index) => {
+          const jugadorDiv = document.createElement("p");
+          jugadorDiv.textContent = `${index + 1}. ${jugador.nombre || "Sin nombre"}`;
+          listaJugadoresFinalizados.appendChild(jugadorDiv);
+        });
+      }
+
     } catch (error) {
       console.error("Error cargando jugadores:", error);
-      listaJugadores.innerHTML = "<p style='color:red;'>Error al cargar jugadores.</p>";
+      listaJugadoresEnCurso.innerHTML = "<p style='color:red;'>Error al cargar jugadores.</p>";
+      listaJugadoresFinalizados.innerHTML = "<p style='color:red;'>Error al cargar jugadores.</p>";
     }
   }
 

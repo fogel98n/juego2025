@@ -30,7 +30,13 @@ export function posicionesAdivinaLafruta(partida) {
         return;
       }
 
-      data.sort((a, b) => a.tiempo - b.tiempo);
+      // Filtrar jugadores únicos por nombre
+      const jugadoresUnicos = Array.from(
+        new Map(data.map(j => [j.nombre, j])).values()
+      );
+
+      // Ordenar por tiempo (menor es mejor)
+      jugadoresUnicos.sort((a, b) => (a.tiempo || 0) - (b.tiempo || 0));
 
       const encabezado = document.createElement("div");
       encabezado.className = "fila encabezado";
@@ -43,7 +49,7 @@ export function posicionesAdivinaLafruta(partida) {
       `;
       tabla.appendChild(encabezado);
 
-      data.forEach((jugador, index) => {
+      jugadoresUnicos.forEach((jugador, index) => {
         const fila = document.createElement("div");
         fila.className = "fila";
 

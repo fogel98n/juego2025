@@ -18,7 +18,6 @@ export function posicionesAdivina(partida) {
 
   contenedor.appendChild(titulo);
   contenedor.appendChild(tabla);
-
   contenedor.appendChild(botones());
 
   fetch(`${BASE_URL}/adivina/partidas?id_partida=${partida.id_partida}`)
@@ -31,7 +30,13 @@ export function posicionesAdivina(partida) {
         return;
       }
 
-      data.sort((a, b) => a.tiempo - b.tiempo);
+      // Eliminar duplicados por nombre
+      const jugadoresUnicos = Array.from(
+        new Map(data.map(j => [j.nombre, j])).values()
+      );
+
+      // Ordenar por tiempo
+      jugadoresUnicos.sort((a, b) => (a.tiempo || 0) - (b.tiempo || 0));
 
       const encabezado = document.createElement("div");
       encabezado.className = "fila encabezado";
@@ -44,7 +49,7 @@ export function posicionesAdivina(partida) {
       `;
       tabla.appendChild(encabezado);
 
-      data.forEach((jugador, index) => {
+      jugadoresUnicos.forEach((jugador, index) => {
         const fila = document.createElement("div");
         fila.className = "fila";
 
