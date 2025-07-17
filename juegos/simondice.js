@@ -81,6 +81,30 @@ export function simondice(partida) {
     }
   }
 
+  // Función para mostrar panel emergente con ronda superada
+  function mostrarPanelRondaSuperada(ronda) {
+    const panel = document.createElement("div");
+    panel.className = "panel-ronda-superada";
+    panel.textContent = `¡Ronda ${ronda - 1} superada!`;
+    panel.style.position = "fixed";
+    panel.style.top = "20%";
+    panel.style.left = "50%";
+    panel.style.transform = "translateX(-50%)";
+    panel.style.backgroundColor = "rgba(0, 128, 0, 0.85)";
+    panel.style.color = "white";
+    panel.style.padding = "1rem 2rem";
+    panel.style.borderRadius = "10px";
+    panel.style.fontSize = "1.5rem";
+    panel.style.zIndex = "9999";
+    panel.style.boxShadow = "0 0 10px #004400";
+
+    document.body.appendChild(panel);
+
+    setTimeout(() => {
+      panel.remove();
+    }, 1500);
+  }
+
   function siguienteRonda() {
     contenedorOpciones.innerHTML = "";
     const opciones = [...preguntas].sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -115,6 +139,9 @@ export function simondice(partida) {
             clearTimeout(timerId);
             mostrarPosiciones("abandonada");
           } else if (rondaActual < rondasTotales) {
+            // Muestra panel antes de avanzar a la siguiente ronda
+            mostrarPanelRondaSuperada(rondaActual + 1);
+
             rondaActual++;
             siguienteRonda();
           } else {
@@ -136,7 +163,7 @@ export function simondice(partida) {
       aciertos,
       intentos_fallidos: intentos - aciertos,
       tiempo: tiempoUsado,
-      estado
+      estado // Solo estado del usuario
     };
 
     console.log("📤 Enviando resultado simondice:", datos);

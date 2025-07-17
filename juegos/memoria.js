@@ -145,10 +145,10 @@ function crearJuegoMemoria(partida, aciertosRef, movimientosRef, getTiempoRestan
                 movimientos,
                 tiempo_usado: tiempoUsado,
                 puntuacion,
-                estado: "finalizada",
+                estado: "finalizada",  // Estado del usuario, no de la partida
               };
 
-              console.log("📤 Enviando resultado:", data);
+              console.log("📤 Enviando resultado del usuario:", data);
 
               fetch(`${BASE_URL}/guardaresultado`, {
                 method: "POST",

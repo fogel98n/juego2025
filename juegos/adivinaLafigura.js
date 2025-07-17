@@ -97,13 +97,7 @@ export function adivinaLafigura(partida) {
       figura.addEventListener("click", () => {
         if (f.clase === actual.respuesta) {
           aciertos++;
-          mostrarEmergente("✅ Correcto", "¡Muy bien! Sigue así 💪", true);
-          indice++;
-          intentosFallidos = 0;
-          intentosRestantes = 3;
-          intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
-          resetearEstrellas();
-          cargarPregunta();
+          mostrarRondaSuperada(indice + 1);
         } else {
           mostrarEmergente("❌ Incorrecto", "Intenta nuevamente", false);
           if (intentosFallidos < estrellas.length) {
@@ -126,6 +120,27 @@ export function adivinaLafigura(partida) {
       wrapper.appendChild(figura);
       contenedorFiguras.appendChild(wrapper);
     });
+  }
+
+  function mostrarRondaSuperada(ronda) {
+    mostrarEmergente(
+      "¡Ronda superada!",
+      `¡Has superado la ronda ${ronda}! 🎉`,
+      true
+    );
+
+    const botonContinuar = document.querySelector(".emergente button");
+    if (botonContinuar) {
+      botonContinuar.onclick = () => {
+        document.querySelector(".emergente-fondo").remove();
+        indice++;
+        intentosFallidos = 0;
+        intentosRestantes = 3;
+        intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
+        resetearEstrellas();
+        cargarPregunta();
+      };
+    }
   }
 
   function resetearEstrellas() {

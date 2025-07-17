@@ -59,12 +59,10 @@ export function adivinaLafruta(partida) {
     ]
   ];
 
-  // Determinar nivel
   const nivelString = partida.nombre_nivel || "nivel1";
   const nivelIndex = Math.max(0, Math.min(2, parseInt(nivelString.replace(/\D/g, ""), 10) - 1));
   const frutas = frutasPorNivel[nivelIndex];
 
-  // Crear contenedor principal
   const contenedor = document.createElement("section");
   contenedor.className = "contenedor-adivina-lafruta";
 
@@ -92,7 +90,6 @@ export function adivinaLafruta(partida) {
   contenedorOpciones.className = "opciones-frutas";
   contenedor.appendChild(contenedorOpciones);
 
-  // Variables de control
   let rondaActual = 1;
   const rondasTotales = 3;
   let aciertos = 0;
@@ -108,9 +105,7 @@ export function adivinaLafruta(partida) {
   function actualizarTiempo() {
     const minutos = Math.floor(tiempoRestante / 60);
     const segundos = tiempoRestante % 60;
-    tiempoDiv.textContent = `⏱ Tiempo: ${minutos.toString().padStart(2, "0")}:${segundos
-      .toString()
-      .padStart(2, "0")}`;
+    tiempoDiv.textContent = `⏱ Tiempo: ${minutos.toString().padStart(2, "0")}:${segundos.toString().padStart(2, "0")}`;
 
     if (tiempoRestante > 0) {
       tiempoRestante--;
@@ -124,6 +119,30 @@ export function adivinaLafruta(partida) {
 
   actualizarTiempo();
   intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
+
+  // Panel emergente para ronda superada
+  function mostrarPanelRondaSuperada(ronda) {
+    const panel = document.createElement("div");
+    panel.className = "panel-ronda-superada";
+    panel.textContent = `¡Ronda ${ronda - 1} superada!`;
+    panel.style.position = "fixed";
+    panel.style.top = "20%";
+    panel.style.left = "50%";
+    panel.style.transform = "translateX(-50%)";
+    panel.style.backgroundColor = "rgba(0, 128, 0, 0.85)";
+    panel.style.color = "white";
+    panel.style.padding = "1rem 2rem";
+    panel.style.borderRadius = "10px";
+    panel.style.fontSize = "1.5rem";
+    panel.style.zIndex = "9999";
+    panel.style.boxShadow = "0 0 10px #004400";
+
+    document.body.appendChild(panel);
+
+    setTimeout(() => {
+      panel.remove();
+    }, 1500);
+  }
 
   function siguienteRonda() {
     contenedorOpciones.innerHTML = "";
@@ -147,58 +166,34 @@ export function adivinaLafruta(partida) {
         if (fruta.nombre === frutaCorrecta.nombre) {
           aciertos++;
           img.style.border = "3px solid green";
-        } else {
-          intentosRestantes--;
-          img.style.border = "3px solid red";
-        }
 
-        intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
+          if (rondaActual < rondasTotales) {
+            // Mostrar panel antes de cargar la siguiente ronda
+            mostrarPanelRondaSuperada(rondaActual + 1);
 
-        setTimeout(() => {
-          if (intentosRestantes <= 0) {
-            clearTimeout(timerId);
-            guardarResultado("abandonada");
-          } else if (rondaActual < rondasTotales) {
             rondaActual++;
-            siguienteRonda();
+            setTimeout(siguienteRonda, 1500);
           } else {
             clearTimeout(timerId);
             guardarResultado("finalizada");
           }
-        }, 800);
+        } else {
+          intentosRestantes--;
+          img.style.border = "3px solid red";
+          intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
+
+          if (intentosRestantes <= 0) {
+            clearTimeout(timerId);
+            guardarResultado("abandonada");
+          }
+        }
+
+        intentosDiv.textContent = `Intentos: ${intentosRestantes}`;
       });
 
       wrapper.appendChild(img);
       contenedorOpciones.appendChild(wrapper);
     });
-  }
-
-  function guardarResultado(estado = "finalizada") {
-    const datos = {
-      id_usuario: partida.id_usuario,
-      id_partida: partida.id_partida,
-      aciertos,
-      intentos_fallidos: intentos - aciertos,
-      tiempo: tiempoUsado,
-      estado
-    };
-
-    console.log("📤 Enviando resultado fruta:", datos);
-
-    fetch(`${BASE_URL}/frutas/guardarresultado`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(datos)
-    })
-      .then((res) => res.json())
-      .then(() => {
-        contenedor.innerHTML = "";
-        const panelPosiciones = posicionesAdivinaLafruta(partida);
-        contenedor.appendChild(panelPosiciones);
-      })
-      .catch((err) => {
-        console.error("❌ Error al guardar resultado:", err);
-      });
   }
 
   siguienteRonda();

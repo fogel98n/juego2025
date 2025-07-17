@@ -30,7 +30,25 @@ export function posicionesEmoji(partida) {
         return;
       }
 
-      data.sort((a, b) => a.tiempo - b.tiempo);
+      // Filtrar duplicados por id_usuario (quedarse con el de menor tiempo)
+      const jugadoresUnicos = new Map();
+      data.forEach((jugador) => {
+        const clave = jugador.id_usuario;
+        if (!jugadoresUnicos.has(clave)) {
+          jugadoresUnicos.set(clave, jugador);
+        } else {
+          const existente = jugadoresUnicos.get(clave);
+          const tiempoActual = jugador.tiempo || jugador.tiempo_total || 0;
+          const tiempoExistente = existente.tiempo || existente.tiempo_total || 0;
+
+          if (tiempoActual < tiempoExistente) {
+            jugadoresUnicos.set(clave, jugador);
+          }
+        }
+      });
+
+      const jugadores = Array.from(jugadoresUnicos.values());
+      jugadores.sort((a, b) => (a.tiempo || a.tiempo_total || 0) - (b.tiempo || b.tiempo_total || 0));
 
       const encabezado = document.createElement("div");
       encabezado.className = "fila encabezado";
@@ -42,7 +60,7 @@ export function posicionesEmoji(partida) {
       `;
       tabla.appendChild(encabezado);
 
-      data.forEach((jugador, index) => {
+      jugadores.forEach((jugador, index) => {
         const fila = document.createElement("div");
         fila.className = "fila";
 

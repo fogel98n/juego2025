@@ -6,6 +6,7 @@ import { adivinaLafruta } from "../juegos/adivinaLafruta.js";
 import { simondice } from "../juegos/simondice.js";
 import { BASE_URL } from "../config.js";
 import { esperaUsuario } from "./esperaUsuario.js";
+import { avatares } from "./avatar.js";
 
 export function usuario(partida) {
   const contenedor = document.createElement("section");
@@ -25,6 +26,12 @@ export function usuario(partida) {
   panel_usuario.appendChild(label);
   panel_usuario.appendChild(inputUsuario);
 
+  let avatarSeleccionado = null;
+
+  const selectorAvatares = avatares((avatarId) => {
+    avatarSeleccionado = avatarId;
+  });
+
   const contenedor_btn = document.createElement("div");
   contenedor_btn.className = "contenedor-btn";
 
@@ -40,19 +47,24 @@ export function usuario(partida) {
       return;
     }
 
+    if (!avatarSeleccionado) {
+      alert("Por favor selecciona un avatar");
+      return;
+    }
+
     if (!partida || (!partida.codigo_partida && !partida.id)) {
       alert("No se encontró el código o ID de la partida. Por favor vuelve al inicio.");
       return;
     }
 
     try {
-      // Registrar usuario
       const resUsuario = await fetch(`${BASE_URL}/usuarios/registrar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nombre,
           codigo_partida: partida.codigo_partida,
+          avatar: avatarSeleccionado,
         }),
       });
 
@@ -68,9 +80,9 @@ export function usuario(partida) {
         id_usuario: usuarioRegistrado.id,
         id_partida: usuarioRegistrado.id_partida,
         nombre_usuario: usuarioRegistrado.nombre,
+        avatar: usuarioRegistrado.avatar || avatarSeleccionado,
       };
 
-      // 🧩 Asociar usuario a la partida según el tipo de juego
       const tipo_partida = (() => {
         switch (partida.id_juego) {
           case 1: return "memoria";
@@ -97,12 +109,48 @@ export function usuario(partida) {
         }),
       });
 
-      // Mostrar pantalla de espera
+      async function mostrarUsuariosConAvatar(id_partida, tipo) {
+        try {
+          const res = await fetch(`${BASE_URL}/usuarios/en_partida/${tipo}/${id_partida}`);
+          if (!res.ok) throw new Error("No se pudo obtener la lista de usuarios");
+
+          const usuarios = await res.json();
+
+          const lista = document.createElement("div");
+          lista.className = "lista-usuarios";
+
+          usuarios.forEach(user => {
+            const item = document.createElement("div");
+            item.className = "usuario-item";
+
+            const avatar = document.createElement("img");
+            avatar.className = "avatar-pequeno";
+            avatar.alt = `Avatar de ${user.nombre}`;
+            avatar.src = `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${user.id_avatar || user.avatar || "default"}&size=40`;
+
+            const nombreSpan = document.createElement("span");
+            nombreSpan.textContent = user.nombre;
+
+            item.appendChild(avatar);
+            item.appendChild(nombreSpan);
+
+            lista.appendChild(item);
+          });
+
+          return lista;
+
+        } catch (error) {
+          console.error("Error al mostrar usuarios con avatar:", error);
+        }
+      }
+
       const panelEspera = await esperaUsuario(datosCompletos);
       document.body.innerHTML = "";
       document.body.appendChild(panelEspera);
 
-      // Esperar a que el estado cambie a 'iniciada'
+      const listaUsuarios = await mostrarUsuariosConAvatar(datosCompletos.id_partida, tipo_partida);
+      if (listaUsuarios) panelEspera.appendChild(listaUsuarios);
+
       const verificarInicio = setInterval(async () => {
         try {
           const res = await fetch(`${BASE_URL}/partidas/${datosCompletos.id_partida}/estado`);
@@ -139,7 +187,7 @@ export function usuario(partida) {
         } catch (error) {
           console.error("Error consultando estado de la partida:", error);
         }
-      }, 2000); // consulta cada 2 segundos
+      }, 2000);
 
     } catch (error) {
       alert("No se pudo registrar el usuario: " + error.message);
@@ -151,6 +199,7 @@ export function usuario(partida) {
 
   contenedor.appendChild(Header());
   contenedor.appendChild(panel_usuario);
+  contenedor.appendChild(selectorAvatares); // asegúrate que sea un elemento válido
   contenedor.appendChild(contenedor_btn);
 
   return contenedor;

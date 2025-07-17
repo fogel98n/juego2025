@@ -30,7 +30,13 @@ export function posicionesSimonDice(partida) {
         return;
       }
 
-      data.sort((a, b) => a.tiempo - b.tiempo);
+      // Eliminar duplicados por nombre
+      const jugadoresUnicos = Array.from(
+        new Map(data.map(j => [j.nombre, j])).values()
+      );
+
+      // Ordenar por tiempo
+      jugadoresUnicos.sort((a, b) => (a.tiempo || 0) - (b.tiempo || 0));
 
       const encabezado = document.createElement("div");
       encabezado.className = "fila encabezado";
@@ -43,7 +49,7 @@ export function posicionesSimonDice(partida) {
       `;
       tabla.appendChild(encabezado);
 
-      data.forEach((jugador, index) => {
+      jugadoresUnicos.forEach((jugador, index) => {
         const fila = document.createElement("div");
         fila.className = "fila";
 
@@ -65,4 +71,3 @@ export function posicionesSimonDice(partida) {
 
   return contenedor;
 }
-
